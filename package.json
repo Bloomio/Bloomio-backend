@@ -30,6 +30,7 @@
   "dependencies": {
     "dotenv": "^5.0.1",
     "http-errors": "^1.6.3",
+    "jsonwebtoken": "^8.2.1",
     "winston": "^3.0.0-rc5"
   }
 }
