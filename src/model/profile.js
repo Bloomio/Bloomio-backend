@@ -7,10 +7,10 @@ const profileSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  collection: [plantSchema],
-  quote: {
-    type: String,
-  },
+  // collection: [plantSchema],
+  // quote: {
+  //   type: String,
+  // },
   avatar: {
     type: String,
   },
