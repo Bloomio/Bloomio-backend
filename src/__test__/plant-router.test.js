@@ -2,31 +2,29 @@
 
 import superagent from 'superagent';
 import { startServer, stopServer } from '../lib/server';
-import { createImageMock, removeImageMock } from './lib/image-mock';
+import { createPlantMock, removePlantMock } from './lib/plant-mock';
 
 const apiURL = `http://localhost:${process.env.PORT}`;
 
-describe('TESTING ROUTES At /images', () => {
+describe('TESTING ROUTES At /plants', () => {
   beforeAll(startServer);
-  afterEach(removeImageMock);
+  afterEach(removePlantMock);
   afterAll(stopServer);
 
-  describe('POST /images', () => {
-    describe('POST 200 for successful post to /images', () => {
+  describe('POST /plants', () => {
+    describe('POST 200 for successful post to /plants', () => {
       test('should return 200', () => {
         jest.setTimeout(10000);
-        return createImageMock()
+        return createPlantMock()
           .then((mockResponse) => {
             const { token } = mockResponse.accountMock;
-            return superagent.post(`${apiURL}/images`)
+            return superagent.post(`${apiURL}/plants`)
               .set('Authorization', `Bearer ${token}`)
-              .field('title', 'doggo')
-              .attach('image', `${__dirname}/assets/dog.jpg`)
+              .send(mockResponse)
               .then((response) => {
                 expect(response.status).toEqual(200);
-                expect(response.body.title).toEqual('doggo');
                 expect(response.body._id).toBeTruthy();
-                expect(response.body.url).toBeTruthy();
+                // expect(response.body.url).toBeTruthy();
               });
           })
           .catch((error) => {
