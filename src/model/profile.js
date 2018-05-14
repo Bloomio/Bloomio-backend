@@ -7,12 +7,22 @@ const profileSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  // collection: [plantSchema],
-  // quote: {
-  //   type: String,
-  // },
   avatar: {
     type: String,
+  },
+  phoneNumber: {
+    type: Number,
+    min: 10,
+    max: 11,
+  },
+  planterBox: [],
+  location: {
+    type: String,
+    required: true,
+  },
+  googleID: {
+    type: String,
+    unique: true,
   },
   account: {
     type: mongoose.Schema.ObjectId,
