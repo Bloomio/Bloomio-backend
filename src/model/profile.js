@@ -11,11 +11,14 @@ const profileSchema = mongoose.Schema({
     type: String,
   },
   phoneNumber: {
-    type: Number,
-    min: 10,
-    max: 11,
+    type: String,
   },
-  planterBox: [],
+  planterBox: [
+    {
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'plant',
+    },
+  ],
   location: {
     type: String,
     required: true,
@@ -29,6 +32,8 @@ const profileSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
+}, {
+  usePushEach: true,
 });
 
 export default mongoose.model('profile', profileSchema);
