@@ -51,7 +51,7 @@ function createToken() {
     .then((account) => {
       return jsonWebToken.sign(
         { tokenSeed: account.tokenSeed },
-        process.env.IMAGE_UPLOAD_SECRET,
+        process.env.BLOOMIO_SECRET,
       );
     })
     .catch(() => {
