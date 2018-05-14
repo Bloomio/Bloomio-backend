@@ -29,7 +29,7 @@ plantRouter.post('/plants', bearerAuthMiddleware, jsonParser, (request, response
     .catch(next);
 });
 
-plantRouter.get('/plants/:id',bearerAuthMiddleware, (request, response, next) => {
+plantRouter.get('/plants/:id', bearerAuthMiddleware, (request, response, next) => {
   logger.log(logger.INFO, 'GET - processing a request');
   return Plant.findById(request.params.id)
     .then((plant) => {
@@ -68,32 +68,3 @@ plantRouter.delete('/plants/:id', bearerAuthMiddleware, (request, response, next
     });
 });
 export default plantRouter;
-
-
-// const plantRouter = new Router();
-
-// plantRouter.post('/plants', bearerAuthMiddleware, multerUpload.any(), (request, response, next) => {
-//   if (!request.account) {
-//     return next(new HttpError(404, 'PLANT ROUTER ERROR, not found'));
-//   }
-
-//   if (!request.body.title || request.files.length > 1 || request.files[0].fieldname !== 'image') {
-//     return next(new HttpError(400, 'PLANT ROUTER ERROR: invalid request.'));
-//   }
-
-//   const file = request.files[0];
-//   const key = `${file.filename}.${file.originalname}`;
-
-//   return s3Upload(file.path, key)
-//     .then((url) => {
-//       return new Plant({
-//         title: request.body.title,
-//         account: request.account._id,
-//         url,
-//       }).save();
-//     })
-//     .then(image => response.json(image))
-//     .catch(next);
-// });
-
-// export default plantRouter;

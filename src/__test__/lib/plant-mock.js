@@ -9,7 +9,6 @@ const createPlantMock = () => {
   const resultMock = {};
   return createAccountMock()
     .then((mockAccount) => {
-      console.log('mockAccount', mockAccount);
       resultMock.accountMock = mockAccount;
 
       return new Plant({

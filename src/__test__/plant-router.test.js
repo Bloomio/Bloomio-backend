@@ -13,10 +13,10 @@ describe('TESTING ROUTES At /plants', () => {
 
   describe('POST /plants', () => {
     describe('POST 200 for successful post to /plants', () => {
-      test('should return 200', () => {
-        jest.setTimeout(10000);
+      test.only('should return 200', () => {
         return createPlantMock()
           .then((mockResponse) => {
+            console.log(mockResponse);
             const { token } = mockResponse.accountMock;
             return superagent.post(`${apiURL}/plants`)
               .set('Authorization', `Bearer ${token}`)
