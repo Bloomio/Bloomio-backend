@@ -6,6 +6,7 @@
   "scripts": {
     "test": "eslint . && jest --coverage --forceExit --runInBand",
     "test-nolint": "jest --coverage --forceExit --runInBand",
+    "test-console": "jest --coverage",
     "dbon": "mkdir -p ./db && mongod --dbpath ./db",
     "dboff": "killall mongod",
     "build": "babel src -d build",

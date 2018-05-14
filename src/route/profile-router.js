@@ -27,17 +27,13 @@ profileRouter.post('/profile', bearerAuthMiddleware, jsonParser, (request, respo
     .catch(next);
 });
 
-profileRouter.get('/profile', bearerAuthMiddleware, (request, response, next) => {
-  if (!request.account || !request.body.firstName) {
-    return next(new HttpError(400, 'AUTH - invalid request'));
-  }
-  return new Profile({
-    ...request.body,
-    account: request.account._id,
-  })
-    .save()
+profileRouter.get('/profile/:id', bearerAuthMiddleware, (request, response, next) => {
+  return Profile.findById(request.params.id)
     .then((profile) => {
-      logger.log(logger.INFO, 'Returning a 200 and a new Profile.');
+      if (!profile) {
+        return next(new HttpError(404, 'Profile not found, invalid id.'));
+      }
+      logger.log(logger.INFO, 'GET - responding with a 200 status code');
       return response.json(profile);
     })
     .catch(next);
