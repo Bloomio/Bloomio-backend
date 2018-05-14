@@ -13,7 +13,7 @@ describe('TESTING ROUTES At /plants', () => {
 
   describe('POST /plants', () => {
     describe('POST 200 for successful post to /plants', () => {
-      test.only('should return 200', () => {
+      test('should return 200', () => {
         return createPlantMock()
           .then((mockResponse) => {
             console.log(mockResponse);
