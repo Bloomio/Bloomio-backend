@@ -12,8 +12,9 @@ const createProfileMock = () => {
       resultMock.accountSetMock = accountSetMock;
       return new Profile({
         firstName: faker.name.firstName(),
-        avatar: faker.internet.image(),
-        phoneNumber: faker.random.number(10),
+        location: faker.address.zipCode(),
+        avatar: faker.random.image(),
+        phoneNumber: faker.phone.phoneNumber(),
         googleID: faker.internet.email(),
         account: accountSetMock.account._id,
       }).save();
