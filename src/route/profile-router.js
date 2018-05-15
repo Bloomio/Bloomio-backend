@@ -52,4 +52,13 @@ profileRouter.put('/profile/:id', bearerAuthMiddleware, jsonParser, (request, re
     .catch(next);
 });
 
+profileRouter.delete('/profile/:id', bearerAuthMiddleware, (request, response, next) => {
+  return Profile.findByIdAndRemove(request.params.id)
+    .then(() => {
+      logger.log(logger.INFO, 'PROFILE: DELETE - responding with 204');
+      return response.sendStatus(204);
+    })
+    .catch(next);
+});
+
 export default profileRouter;

@@ -53,7 +53,7 @@ accountRouter.put('/accounts/:id', basicAuthMiddleware, jsonParser, (request, re
 
 accountRouter.delete('/accounts/:id', basicAuthMiddleware, (request, response, next) => {
   return Account.findByIdAndRemove(request.params.id)
-    .then((accountToDelete) => {
+    .then(() => {
       logger.log(logger.INFO, 'DELETE - Account successfully deleted.');
       return response.sendStatus(204);
     })
