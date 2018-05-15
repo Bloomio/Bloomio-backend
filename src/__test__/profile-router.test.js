@@ -259,18 +259,24 @@ describe('PROFILE SCHEMA', () => {
     });
   });
 
-  describe.only('DELETE /profile', () => {
+  describe('DELETE /profile', () => {
     test('DELETE - Should return 204 for deleted profile', () => {
       let deleteProfileMock = null;
       return createProfileMock()
         .then((profileToDelete) => {
           deleteProfileMock = profileToDelete;
-          console.log(deleteProfileMock);
           return superagent.delete(`${apiURL}/profile/${deleteProfileMock.profile._id}`)
             .set('Authorization', `Bearer ${deleteProfileMock.accountSetMock.token}`)
             .then((response) => {
               expect(response.status).toEqual(204);
             });
+        });
+    });
+    test('DELETE - should return 400 if no account exists', () => {
+      return superagent.delete(`${apiURL}/profile/InvalidID`)
+        .then(Promise.reject)
+        .catch((error) => {
+          expect(error.status).toEqual(400);
         });
     });
   });
