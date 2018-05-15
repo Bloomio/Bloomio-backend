@@ -39,4 +39,17 @@ profileRouter.get('/profile/:id', bearerAuthMiddleware, (request, response, next
     .catch(next);
 });
 
+profileRouter.put('/profile/:id', bearerAuthMiddleware, jsonParser, (request, response, next) => {
+  const options = { runValidators: true, new: true };
+  return Profile.findByIdAndUpdate(request.params.id, request.body, options)
+    .then((updatedProfile) => {
+      if (!updatedProfile) {
+        return next(new HttpError(404, 'Profile not found, invalid id.'));
+      }
+      logger.log(logger.INFO, 'PROFILE: PUT - responding with 200');
+      return response.json(updatedProfile);
+    })
+    .catch(next);
+});
+
 export default profileRouter;
