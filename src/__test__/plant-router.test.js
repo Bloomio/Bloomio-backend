@@ -87,96 +87,77 @@ describe('TESTING ROUTES At /plants', () => {
             });
         });
     });
-  });
+    describe('GET 200 for successful get to /plants/:id', () => {
+      test(' should return 200', () => {
+        let plantTest = null;
+        return createPlantMock()
+          .then((plant) => {
+            plantTest = plant;
+            return superagent.get(`${apiURL}/plants/${plant.plant._id}`)
+              .set('Authorization', `Bearer ${plantTest.accountMock.token}`);
+          })
+          .then((response) => {
+            expect(response.status).toEqual(200);
+            expect(response.body.token).toBeTruthy();
+          })
+          .catch((err) => {
+            logger.log(logger.ERROR, err);
+          });
+      });
 
-  describe('GET 200 for successful get to /plants/:id', () => {
-    test(' should return 200', () => { // this test working
-      let plantTest = null;
-      return createProfileMock()
-        .then((plant) => {
-          const { token } = plant.accountSetMock;
-          plantTest = plant;
-          console.log('HEREEEE!', plant.plant._id);
-          console.log('HERE', plantTest.profileMock.accountSetMock.token);
-          return superagent.get(`${apiURL}/plants/${plantTest.plant._id}`)
-            .set('Authorization', `Bearer ${plantTest.accountSetMock.token}`)
-            .send({
-              plantNickname: faker.lorem.words(2),
-              commonName: faker.lorem.words(2),
-              scientificName: faker.lorem.words(2),
-              groupType: faker.lorem.words(2),
-              placement: faker.lorem.words(2),
-              waterDate: faker.lorem.words(2)  
-            });
-        })
-        .then((response) => {
-          console.log(response);
-          expect(response.status).toEqual(700);
-          expect(response.body.token).toBeTruthy();
-        })
-        .catch((err) => {
-          logger.log(logger.ERROR, err);
-        });
-    });
+      test('GET /plants should return a 400 status code for no id', () => {
+        return createPlantMock()
+          .then(() => {
+            return superagent.post(`${apiURL}/plants/`);
+          })
+          .then(Promise.reject)
+          .catch((err) => {
+            expect(err.status).toEqual(400);
+          });
+      });
 
-    test('GET /plants should return a 400 status code for no id', () => {
-      let plantTest = null;
-      return createPlantMock()
-        .then((plant) => {
-          console.log('HEREEEE!', plantTest);
-          plantTest = plant;
-          return superagent.get(`${apiURL}/plants/`)
-            .set('Authorization', `Bearer ${plantTest.plant.token}`);
-        })
-        // .then(() => {
-        //   return superagent.post(`${apiURL}/plants/`);
-        // })
-        .then(Promise.reject)
-        .catch((err) => {
-          expect(err.status).toEqual(400);
-        });
+      test('GET /plants should return a 404 status code for missing token', () => {
+        return createPlantMock()
+          .then((plant) => {
+            return superagent.post(`${apiURL}/pictures/${plant.plant._id}`)
+              .set('Authorization', 'Bearer ');
+          })
+          .then(Promise.reject)
+          .catch((err) => {
+            expect(err.status).toEqual(404);
+          });
+      });
     });
-
-    test('GET /plants should return a 404 status code for missing token', () => {
-      return createPlantMock()
-        .then((plant) => {
-          return superagent.post(`${apiURL}/pictures/${plant.plant._id}`)
-            .set('Authorization', 'Bearer ');
-        })
-        .then(Promise.reject)
-        .catch((err) => {
-          expect(err.status).toEqual(404);
-        });
-    });
-  });
-  describe('DELETE', () => {
-    test('DEL /plants/:id should respond with 204 if delete completed', () => {
-      return createPlantMock()
-        .then((plantMock) => {
-          return superagent.delete(`${apiURL}/pictures/${plantMock.plant._id}`)
-            .set('Authorization', `Bearer ${plantMock.accountMock.token}`);
-        })
-        .then((response) => {
-          expect(response.status).toEqual(204);
-        });
-    });
-    test('DEL /plants/:id should respond with 404 if no picture exists', () => {
-      return superagent.delete(`${apiURL}/pictures/wrongId`)
-        .then(Promise.reject)
-        .catch((error) => {
-          expect(error.status).toEqual(404);// this test passing
-        });
-    });
-    test('DEL /plants/:id should respond with 401 if bad token', () => {
-      return createPlantMock()
-        .then((plantMock) => {
-          return superagent.delete(`${apiURL}/pictures/${plantMock.plant._id}`)
-            .set('Authorization', 'Bearer ');
-        })
-        .then(Promise.reject)
-        .catch((error) => {
-          expect(error.status).toEqual(401);
-        });
+    describe('DELETE', () => {
+      test('DEL /plants/:id should respond with 204 if delete completed', () => {
+        return createPlantMock()
+          .then((plantMock) => {
+            return superagent.delete(`${apiURL}/pictures/${plantMock.plant._id}`)
+              .set('Authorization', `Bearer ${plantMock.accountMock.token}`);
+          })
+          .then((response) => {
+            expect(response.status).toEqual(204);
+          });
+      });
+      test('DEL /plants/:id should respond with 404 if no picture exists', () => {
+        return superagent.delete(`${apiURL}/pictures/wrongId`)
+          .then(Promise.reject)
+          .catch((error) => {
+            expect(error.status).toEqual(404);
+          });
+      });
+      test('DEL /plants/:id should respond with 401 if bad token', () => {
+        return createPlantMock()
+          .then((plantMock) => {
+            return superagent.delete(`${apiURL}/pictures/${plantMock.plant._id}`)
+              .set('Authorization', 'Bearer ');
+          })
+          .then(Promise.reject)
+          .catch((error) => {
+            expect(error.status).toEqual(401);
+          });
+      });
     });
   });
 });
+

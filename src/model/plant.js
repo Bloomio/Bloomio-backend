@@ -23,11 +23,11 @@ const plantSchema = mongoose.Schema({
   createdOn: { 
     type: Date,
     // required: true,
-    default: Date.now,
+    default: () => new Date(),
   },
   waterDate: {// .pre before saving water schedule calculate the date intervals
-    type: String,
-    required: true,
+    type: Number,
+    // required: true,
   },
   fertilizerDate: {
     type: Number,
@@ -40,7 +40,7 @@ const plantSchema = mongoose.Schema({
   },
   profile: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
+    // required: true,
   },
 });
 
