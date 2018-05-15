@@ -259,7 +259,7 @@ describe('PROFILE SCHEMA', () => {
     });
   });
 
-  describe.only('DELETE /profile', () => {
+  describe('DELETE /profile', () => {
     test('DELETE - Should return 204 for deleted profile', () => {
       let deleteProfileMock = null;
       return createProfileMock()
