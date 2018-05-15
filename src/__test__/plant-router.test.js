@@ -118,7 +118,7 @@ describe('TESTING ROUTES At /plants', () => {
       test('GET /plants should return a 404 status code for missing token', () => {
         return createPlantMock()
           .then((plant) => {
-            return superagent.post(`${apiURL}/plants/${plantTest.plant._id}`)
+            return superagent.post(`${apiURL}/plants/${plant.plant._id}`)
               .set('Authorization', 'Bearer ');
           })
           .then(Promise.reject)
