@@ -18,7 +18,6 @@ app.use(profileRouter);
 app.use(plantRouter);
 
 app.all('*', (request, response) => {
-  console.log('SERVER: request.body: ', request.body);
   logger.log(logger.INFO, 'Returning a 404 from the catch-all/default route');
   return response.sendStatus(404);
 });

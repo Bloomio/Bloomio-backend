@@ -14,7 +14,6 @@ const plantRouter = new Router();
 
 plantRouter.post('/plants', bearerAuthMiddleware, jsonParser, (request, response, next) => {
   logger.log(logger.INFO, 'POST - processing a request');
-  console.log(request.body);
   if (!request.body.commonName) {
     logger.log(logger.INFO, 'PLANT-ROUTER: Responding with a 400 error code');
     return next(new HttpError(400, 'commonName is required'));
