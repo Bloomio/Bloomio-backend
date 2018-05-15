@@ -109,22 +109,26 @@ describe('ACCOUNT-ROUTER', () => {
     });
   });
 
-  // describe('DELETE /accounts/:id', () => {
-  //   test('DELETE - should return a 204 status code if the account was successfully deleted.', () => {
-  //     let putAcctMock = null;
-  //     return createAccountMock()
-  //       .then((acctSetMock) => {
-  //         putAcctMock = acctSetMock;
-  //         console.log('putAcct', putAcctMock);
-  //         return superagent.put(`${apiURL}/accounts/${putAcctMock.account._id}`)
-  //           .auth(putAcctMock.request.username, putAcctMock.request.password)
-  //           .send({ username: 'Vinny', email: 'thevinster@gregor.com' });
-  //       })
-  //       .then((response) => {
-  //         expect(response.status).toEqual(200);
-  //         expect(response.body.username).toEqual('Vinny');
-  //         expect(response.body.email).toEqual('thevinster@gregor.com');
-  //       });
-  //   });
-  // });
+  describe('DELETE /accounts/:id', () => {
+    test('DELETE - should return a 204 status code if the account was successfully deleted.', () => {
+      let putAcctMock = null;
+      return createAccountMock()
+        .then((acctSetMock) => { 
+          putAcctMock = acctSetMock;
+          console.log('putAcct', putAcctMock);
+          return superagent.delete(`${apiURL}/accounts/${putAcctMock.account._id}`)
+            .auth(putAcctMock.request.username, putAcctMock.request.password);
+        })
+        .then((response) => {
+          expect(response.status).toEqual(204);
+        });
+    });
+    test('DELETE - should respond with 400 if no account found.', () => {
+      return superagent.delete(`${apiURL}/accounts/THisIsAnInvalidId`)
+        .then(Promise.reject)
+        .catch((response) => {
+          expect(response.status).toEqual(400);
+        });
+    });
+  });
 });
