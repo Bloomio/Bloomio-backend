@@ -1,9 +1,6 @@
 {
   "name": "bloomio",
   "version": "1.0.0",
-  "engines": {
-    "node": "9.11"
-  },
   "description": "",
   "main": "index.js",
   "scripts": {
