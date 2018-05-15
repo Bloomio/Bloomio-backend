@@ -115,7 +115,6 @@ describe('ACCOUNT-ROUTER', () => {
       return createAccountMock()
         .then((acctSetMock) => { 
           putAcctMock = acctSetMock;
-          console.log('putAcct', putAcctMock);
           return superagent.delete(`${apiURL}/accounts/${putAcctMock.account._id}`)
             .auth(putAcctMock.request.username, putAcctMock.request.password);
         })

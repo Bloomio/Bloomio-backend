@@ -50,7 +50,7 @@ npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-error
 - 05-14-2018 8:32PM - Documentation reformatted.
 - 05-14-2018 9:44PM - Account PUT routes added/tests passing.
 - 05-14-2018 10:04PM - Account DELETE routes added/tests passing.
-- 
+- 05-14-2018 10:36PM - Profile 409 PUT test passing.
 
 
  

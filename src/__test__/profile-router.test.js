@@ -12,8 +12,8 @@ describe('PROFILE SCHEMA', () => {
   afterAll(stopServer);
   afterEach(removeProfileMock);
 
-  describe('POST ROUTES', () => {
-    test('POST /profile should return a 200 and the newly created profile.', () => {
+  describe('POST /profile', () => {
+    test('POST - should return a 200 status code and the newly created profile.', () => {
       let accountMock = null;
       return createAccountMock()
         .then((accountSetMock) => {
@@ -32,7 +32,7 @@ describe('PROFILE SCHEMA', () => {
           expect(response.body.location).toEqual('98109');
         });
     });
-    test('POST /profile should return a 400 status code if there were missing required values.', () => {
+    test('POST - should return a 400 status code if there were missing required values.', () => {
       return createAccountMock()
         .then((accountSetMock) => {
           return superagent.post(`${apiURL}/profile`)
@@ -46,7 +46,7 @@ describe('PROFILE SCHEMA', () => {
           expect(error.status).toEqual(400);
         });
     });
-    test('POST /profile should return a 401 for an invalid token.', () => {
+    test('POST - should return a 401 for an invalid token.', () => {
       return createAccountMock()
         .then(() => {
           return superagent.post(`${apiURL}/profile`)
@@ -61,7 +61,7 @@ describe('PROFILE SCHEMA', () => {
           expect(error.status).toEqual(401);
         });
     });
-    test('POST /profile should return a 404 for a bad route.', () => {
+    test('POST - should return a 404 for a bad route.', () => {
       let accountMock = null;
       return createAccountMock()
         .then((accountSetMock) => {
@@ -78,7 +78,7 @@ describe('PROFILE SCHEMA', () => {
           expect(error.status).toEqual(404);
         });
     });
-    test('POST /profile should return a 409 status code if there are duplicate unique key values.', () => {
+    test('POST - should return a 409 status code if there are duplicate unique key values.', () => {
       const mockGoogleID = 'daveyjones@google.com';
       return createAccountMock()
         .then((accountSetMock) => {
@@ -111,7 +111,7 @@ describe('PROFILE SCHEMA', () => {
 
   describe('GET ROUTES', () => {
     describe('GET /profile', () => { 
-      test('#GET, should return a 200 status code and the newly created profile.', () => {
+      test('GET - should return a 200 status code and the newly created profile.', () => {
         let profileMock = null;
         return createProfileMock()
           .then((profileSetMock) => {
@@ -123,7 +123,7 @@ describe('PROFILE SCHEMA', () => {
               });
           });
       });
-      test('#GET, should return a 400 for no token being passed', () => {
+      test('GET - should return a 400 for no token being passed.', () => {
         let profileMock = null;
         return createProfileMock()
           .then((profileSetMock) => {
@@ -135,7 +135,7 @@ describe('PROFILE SCHEMA', () => {
               });
           });
       });
-      test('#GET, should return a 401 for an invalid token', () => {
+      test('GET - should return a 401 for an invalid token.', () => {
         let profileMock = null;
         return createProfileMock()
           .then((profileSetMock) => {
@@ -148,7 +148,7 @@ describe('PROFILE SCHEMA', () => {
               });
           });
       });
-      test('#GET, should return a 404 for an invalid id', () => {
+      test('GET - should return a 404 for an invalid id', () => {
         let profileMock = null;
         return createProfileMock()
           .then((profileSetMock) => {
@@ -163,8 +163,9 @@ describe('PROFILE SCHEMA', () => {
       });
     });
   });
+
   describe('PUT /profile', () => {
-    test('200 for successful PUT', () => {
+    test('PUT - should return a 200 status code if successful.', () => {
       let profileToUpdate = null;
       return createProfileMock()
         .then((profile) => {
@@ -181,7 +182,7 @@ describe('PROFILE SCHEMA', () => {
           expect(response.body.firstName).toEqual('test');
         });
     });
-    test('400 for no token being passed', () => {
+    test('PUT - should return a 400 status code for no token being passed.', () => {
       let profileToUpdate = null;
       return createProfileMock()
         .then((profile) => {
@@ -196,7 +197,7 @@ describe('PROFILE SCHEMA', () => {
           expect(error.status).toEqual(400);
         });
     });
-    test('401 for an invalid token being passed', () => {
+    test('PUT - should return a 401 status code for an invalid token being passed.', () => {
       let profileToUpdate = null;
       return createProfileMock()
         .then((profile) => {
@@ -212,7 +213,7 @@ describe('PROFILE SCHEMA', () => {
           expect(error.status).toEqual(401);
         });
     });
-    test('404 for a bad id being passed', () => {
+    test('PUT - should return a 404 status code for a bad id being passed.', () => {
       let profileToUpdate = null;
       return createProfileMock()
         .then((profile) => {
@@ -228,35 +229,33 @@ describe('PROFILE SCHEMA', () => {
           expect(error.status).toEqual(404);
         });
     });
-  //   test('409 for duplicate unique keys', () => {
-  //     let dummyProfile = null;
-  //     let profileToUpdate = null;
-  //     return createAccountMock()
-  //       .then((profile) => {
-  //         dummyProfile = profile;
-  //         return superagent.post(`${apiURL}/profile`)
-  //           .set('Authorization', `Bearer ${dummyProfile.token}`)
-  //           .send({
-  //             firstName: 'Dan',
-  //             location: '98109',
-  //             googleID: 'dan@google.com',
-  //           });
-  //       })
-  //       .then(return createProfileMock())
-      
-  //       .then((profile2) => {
-  //         profileToUpdate = profile2;
-  //         return superagent.put(`${apiURL}/profile/${profileToUpdate.profile._id}`)
-  //           .set('Authorization', `Bearer ${profileToUpdate.accountSetMock.token}`)
-  //           .send({
-  //             googleID: dummyProfile.googleID,
-  //           });
-  //       })
-  //       .then(Promise.reject)
-  //       .catch((error) => {
-  //         expect(error.status).toEqual(409);
-  //       });
-      
-  //   });
+    test('PUT - should return a 409 status code for duplicate unique keys.', () => {
+      let dummyProfile = null;
+      let profileToUpdate = null;
+      return createAccountMock()
+        .then((profile) => {
+          dummyProfile = profile;
+          return superagent.post(`${apiURL}/profile`)
+            .set('Authorization', `Bearer ${dummyProfile.token}`)
+            .send({
+              firstName: 'Dan',
+              location: '98109',
+              googleID: 'dan@google.com',
+            });
+        })
+        .then(() => {
+          return createProfileMock()
+            .then((profile2) => {
+              profileToUpdate = profile2;
+              return superagent.put(`${apiURL}/profile/${profileToUpdate.profile._id}`)
+                .set('Authorization', `Bearer ${profileToUpdate.accountSetMock.token}`)
+                .send({ googleID: 'dan@google.com' });
+            })
+            .then(Promise.reject)
+            .catch((error) => {
+              expect(error.status).toEqual(409);
+            });
+        });
+    });
   });
 });
