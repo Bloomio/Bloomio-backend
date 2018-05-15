@@ -110,7 +110,7 @@ describe('PROFILE SCHEMA', () => {
   });
 
   describe('GET ROUTES', () => {
-    describe('GET /profile', () => { //eslint-disable-line
+    describe('GET /profile', () => { 
       test('#GET, should return a 200 status code and the newly created profile.', () => {
         let profileMock = null;
         return createProfileMock()
@@ -120,6 +120,44 @@ describe('PROFILE SCHEMA', () => {
               .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`)
               .then((response) => {
                 expect(response.status).toEqual(200);
+              });
+          });
+      });
+      test('#GET, should return a 400 for no token being passed', () => {
+        let profileMock = null;
+        return createProfileMock()
+          .then((profileSetMock) => {
+            profileMock = profileSetMock;
+            return superagent.get(`${apiURL}/profile/${profileMock.profile._id}`)
+              .then(Promise.reject)
+              .catch((error) => {
+                expect(error.status).toEqual(400);
+              });
+          });
+      });
+      test('#GET, should return a 401 for an invalid token', () => {
+        let profileMock = null;
+        return createProfileMock()
+          .then((profileSetMock) => {
+            profileMock = profileSetMock;
+            return superagent.get(`${apiURL}/profile/${profileMock.profile._id}`)
+              .set('Authorization', 'Bearer invalidToken')
+              .then(Promise.reject)
+              .catch((error) => {
+                expect(error.status).toEqual(401);
+              });
+          });
+      });
+      test('#GET, should return a 404 for an invalid id', () => {
+        let profileMock = null;
+        return createProfileMock()
+          .then((profileSetMock) => {
+            profileMock = profileSetMock;
+            return superagent.get(`${apiURL}/profile/badID`)
+              .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`)
+              .then(Promise.reject)
+              .catch((error) => {
+                expect(error.status).toEqual(404);
               });
           });
       });
