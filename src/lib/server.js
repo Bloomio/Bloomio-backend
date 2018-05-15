@@ -6,6 +6,7 @@ import logger from './logger';
 import errorMiddleware from './error-middleware';
 import accountRouter from '../route/account-router';
 import profileRouter from '../route/profile-router';
+import plantRouter from '../route/plant-router';
 
 
 const app = express();
@@ -14,8 +15,10 @@ let server = null;
 // routes will be app.use'd here
 app.use(accountRouter);
 app.use(profileRouter);
+app.use(plantRouter);
 
 app.all('*', (request, response) => {
+  console.log('SERVER: request.body: ', request.body);
   logger.log(logger.INFO, 'Returning a 404 from the catch-all/default route');
   return response.sendStatus(404);
 });

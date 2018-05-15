@@ -1,22 +1,20 @@
 'use strict';
 
-// import multer from 'multer';
+
 import { Router } from 'express';
-import bodyParser from 'body-parser';
+import { json } from 'body-parser';
 import HttpError from 'http-errors';
-import logger from '../lib/logger';
-import bearerAuthMiddleware from '../lib/bearer-auth-middleware';
+
 import Plant from '../model/plant';
+import bearerAuthMiddleware from '../lib/bearer-auth-middleware';
+import logger from '../lib/logger';
 
-
-// const multerUpload = multer({ dest: `${__dirname}/../temp` });
-
-
-const jsonParser = bodyParser.json();
+const jsonParser = json();
 const plantRouter = new Router();
 
 plantRouter.post('/plants', bearerAuthMiddleware, jsonParser, (request, response, next) => {
   logger.log(logger.INFO, 'POST - processing a request');
+  console.log(request.body);
   if (!request.body.commonName) {
     logger.log(logger.INFO, 'PLANT-ROUTER: Responding with a 400 error code');
     return next(new HttpError(400, 'commonName is required'));
@@ -53,7 +51,7 @@ plantRouter.put('/plants/:id', bearerAuthMiddleware, jsonParser, (request, respo
         return next(new HttpError(404, 'Plant not found'));
       }
       logger.log(logger.INFO, 'PUT - responding with a 200 status code');
-      return response.json(updatedPlant); 
+      return response.json(updatedPlant);
     })
     .catch(next);
 });

@@ -3,29 +3,34 @@
 import superagent from 'superagent';
 import logger from '../lib/logger';
 import { startServer, stopServer } from '../lib/server';
-import { createPlantMock, removePlantMock } from './lib/plant-mock';
+import { createPlantMock } from './lib/plant-mock';
+import { createProfileMock, removeProfileMock } from './lib/profile-mock';
 
 const apiURL = `http://localhost:${process.env.PORT}`;
 
 describe('TESTING ROUTES At /plants', () => {
   beforeAll(startServer);
-  afterEach(removePlantMock);
+  afterEach(removeProfileMock);
   afterAll(stopServer);
 
   describe('POST /plants', () => {
     describe('POST 200 for successful post to /plants', () => {
       test('should return 200', () => {
-        return createPlantMock()
-          .then((mockResponse) => {
-            console.log(mockResponse);
-            const { token } = mockResponse.accountMock;
+        return createProfileMock()
+          .then((responseMock) => {
+            const { token } = responseMock.accountSetMock;
+            console.log('TEST: token ', token);
             return superagent.post(`${apiURL}/plants`)
               .set('Authorization', `Bearer ${token}`)
-              .send(mockResponse)
+              .send({
+                commonName: 'Geranium',
+                placement: 'indoors',
+              })
               .then((response) => {
                 expect(response.status).toEqual(200);
                 expect(response.body._id).toBeTruthy();
-                // expect(response.body.url).toBeTruthy();
+                expect(response.body.commonName).toEqual('Geranium');
+                expect(response.body.placement).toEqual('indoors');
               });
           })
           .catch((error) => {
@@ -34,15 +39,20 @@ describe('TESTING ROUTES At /plants', () => {
       });
     });
 
-    test('POST /plants should return a 400 status code for bad request', () => {
-      return createPlantMock()
-        .then(() => {
+    test('POST /plants 400 status code for bad request', () => {
+      return createProfileMock()
+        .then((responseMock) => {
+          const { token } = responseMock.accountSetMock;
+          console.log('TEST: token ', token);
           return superagent.post(`${apiURL}/plants`)
-            .send({});
-        })
-        .then(Promise.reject)
-        .catch((err) => {
-          expect(err.status).toEqual(400);
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+              placement: 'indoors',
+            })
+            .then(Promise.reject)
+            .catch((err) => {
+              expect(err.status).toEqual(400);
+            });
         });
     });
 
@@ -51,7 +61,9 @@ describe('TESTING ROUTES At /plants', () => {
         .then(() => {
           return superagent.post(`${apiURL}/plants`)
             .set('Authorization', 'Bearer ')
-            .send({});
+            .send({
+              placement: 'indoors',
+            });
         })
         .then(Promise.reject)
 
