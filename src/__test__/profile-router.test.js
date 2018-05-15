@@ -163,5 +163,100 @@ describe('PROFILE SCHEMA', () => {
       });
     });
   });
+  describe('PUT /profile', () => {
+    test('200 for successful PUT', () => {
+      let profileToUpdate = null;
+      return createProfileMock()
+        .then((profile) => {
+          profileToUpdate = profile;
+          return superagent.put(`${apiURL}/profile/${profileToUpdate.profile._id}`)
+            .set('Authorization', `Bearer ${profileToUpdate.accountSetMock.token}`)
+            .send({
+              firstName: 'test',
+            });
+        })
+        .then((response) => {
+          expect(response.status).toEqual(200);
+          expect(response.body._id).toEqual(profileToUpdate.profile._id.toString());
+          expect(response.body.firstName).toEqual('test');
+        });
+    });
+    test('400 for no token being passed', () => {
+      let profileToUpdate = null;
+      return createProfileMock()
+        .then((profile) => {
+          profileToUpdate = profile;
+          return superagent.put(`${apiURL}/profile/${profileToUpdate.profile._id}`)
+            .send({
+              firstName: 'test',
+            });
+        })
+        .then(Promise.reject)
+        .catch((error) => {
+          expect(error.status).toEqual(400);
+        });
+    });
+    test('401 for an invalid token being passed', () => {
+      let profileToUpdate = null;
+      return createProfileMock()
+        .then((profile) => {
+          profileToUpdate = profile;
+          return superagent.put(`${apiURL}/profile/${profileToUpdate.profile._id}`)
+            .set('Authorization', 'Bearer invalidToken')
+            .send({
+              firstName: 'test',
+            });
+        })
+        .then(Promise.reject)
+        .catch((error) => {
+          expect(error.status).toEqual(401);
+        });
+    });
+    test('404 for a bad id being passed', () => {
+      let profileToUpdate = null;
+      return createProfileMock()
+        .then((profile) => {
+          profileToUpdate = profile;
+          return superagent.put(`${apiURL}/profile/badID`)
+            .set('Authorization', `Bearer ${profileToUpdate.accountSetMock.token}`)
+            .send({
+              firstName: 'test',
+            });
+        })
+        .then(Promise.reject)
+        .catch((error) => {
+          expect(error.status).toEqual(404);
+        });
+    });
+  //   test('409 for duplicate unique keys', () => {
+  //     let dummyProfile = null;
+  //     let profileToUpdate = null;
+  //     return createAccountMock()
+  //       .then((profile) => {
+  //         dummyProfile = profile;
+  //         return superagent.post(`${apiURL}/profile`)
+  //           .set('Authorization', `Bearer ${dummyProfile.token}`)
+  //           .send({
+  //             firstName: 'Dan',
+  //             location: '98109',
+  //             googleID: 'dan@google.com',
+  //           });
+  //       })
+  //       .then(return createProfileMock())
+      
+  //       .then((profile2) => {
+  //         profileToUpdate = profile2;
+  //         return superagent.put(`${apiURL}/profile/${profileToUpdate.profile._id}`)
+  //           .set('Authorization', `Bearer ${profileToUpdate.accountSetMock.token}`)
+  //           .send({
+  //             googleID: dummyProfile.googleID,
+  //           });
+  //       })
+  //       .then(Promise.reject)
+  //       .catch((error) => {
+  //         expect(error.status).toEqual(409);
+  //       });
+      
+  //   });
+  });
 });
-
