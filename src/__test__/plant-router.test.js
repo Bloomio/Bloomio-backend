@@ -100,20 +100,6 @@ describe('PLANT SCHEMA', () => {
           expect(response.body.plantNickname).toBeTruthy();
         });
     });
-    //   let plantTest = null;
-    //   return createPlantMock()
-    //     .then((plant) => {
-    //       plantTest = plant;
-    //       return superagent.get(`${apiURL}/plants/${plantTest.accountSetMock.plant._id}`)
-    //         .set('Authorization', `Bearer ${plantTest.profileMock.accountSetMock.token}`);
-    //     })
-    //     .then((response) => {
-    //       expect(response.status).toEqual(200);
-    //       expect(response.body.commonName).toBeTruthy();
-    //       expect(response.body.placement).toBeTruthy();
-    //       expect(response.body.plantNickname).toBeTruthy();          
-    //     });
-    // });
     test('GET - should return a 400 status code for no id.', () => {
       return createPlantMock()
         .then(() => {
@@ -148,18 +134,21 @@ describe('PLANT SCHEMA', () => {
           expect(response.status).toEqual(204);
         });
     });
-    test('DELETE - should return a 404 status code if no plant exists.', () => {
-      return superagent.delete(`${apiURL}/plants/wrongId`)
-        .then(Promise.reject)
-        .catch((error) => {
-          expect(error.status).toEqual(404);
-        });
-    });
-    test('DELETE - should return a 401 status code for a bad token.', () => {
+    test('DELETE - should return a 400 status code if no token is passed.', () => {
       return createPlantMock()
         .then((plantMock) => {
-          return superagent.delete(`${apiURL}/pictures/${plantMock.plant._id}`)
-            .set('Authorization', 'Bearer ');
+          return superagent.delete(`${apiURL}/plants/${plantMock.plant._id}`);
+        })
+        .then(Promise.reject)
+        .catch((error) => {
+          expect(error.status).toEqual(400);
+        });
+    });
+    test('DELETE - should return a 401 status code if invalid token is passed.', () => {
+      return createPlantMock()
+        .then((plantMock) => {
+          return superagent.delete(`${apiURL}/plants/${plantMock.plant._id}`)
+            .set('Authorization', 'Bearer invalidToken');
         })
         .then(Promise.reject)
         .catch((error) => {
