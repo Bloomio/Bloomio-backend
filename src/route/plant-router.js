@@ -27,7 +27,6 @@ plantRouter.post('/plants', bearerAuthMiddleware, jsonParser, (request, response
 });
 
 plantRouter.get('/plants/:id', bearerAuthMiddleware, (request, response, next) => {
-  logger.log(logger.INFO, 'GET - processing a request');
   return Plant.findById(request.params.id)
     .then((plant) => {
       if (!plant) {
