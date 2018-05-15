@@ -22,11 +22,11 @@ const plantSchema = mongoose.Schema({
   },
   createdOn: { 
     type: Date,
-    required: true,
-    default: () => new Date(),
+    // required: true,
+    default: Date.now,
   },
   waterDate: {// .pre before saving water schedule calculate the date intervals
-    type: Number,
+    type: String,
     required: true,
   },
   fertilizerDate: {

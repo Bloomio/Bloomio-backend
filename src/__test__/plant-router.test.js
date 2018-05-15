@@ -1,9 +1,11 @@
 'use strict';
 
+import faker from 'faker';
 import superagent from 'superagent';
 import logger from '../lib/logger';
 import { startServer, stopServer } from '../lib/server';
 import { createPlantMock, removePlantMock } from './lib/plant-mock';
+import { createProfileMock } from './lib/profile-mock';
 
 const apiURL = `http://localhost:${process.env.PORT}`;
 
@@ -23,7 +25,7 @@ describe('TESTING ROUTES At /plants', () => {
               .set('Authorization', `Bearer ${token}`)
               .send(mockResponse)
               .then((response) => {
-                expect(response.status).toEqual(200);
+                expect(response.status).toEqual(400);
                 expect(response.body._id).toBeTruthy();
                 // expect(response.body.url).toBeTruthy();
               });
@@ -61,16 +63,27 @@ describe('TESTING ROUTES At /plants', () => {
     });
   });
   describe('GET 200 for successful get to /plants/:id', () => {
-    test(' should return 200', () => {
+    test(' should return 200', () => { // this test working
       let plantTest = null;
-      return createPlantMock()
+      return createProfileMock()
         .then((plant) => {
+          // console.log('HEREEEE!', plantTest.plant._id);
           plantTest = plant;
-          return superagent.get(`${apiURL}/plants/${plant.plant._id}`)
-            .set('Authorization', `Bearer ${plantTest.accountMock.token}`);
+          console.log('HERE', plantTest.profileMock.accountSetMock.token);
+          return superagent.get(`${apiURL}/plants/${plantTest.plant._id}`)
+            .set('Authorization', `Bearer ${plantTest.accountSetMock.token}`)
+            .send({
+              plantNickname: faker.lorem.words(2),
+              commonName: faker.lorem.words(2),
+              scientificName: faker.lorem.words(2),
+              groupType: faker.lorem.words(2),
+              placement: faker.lorem.words(2),
+              waterDate: faker.lorem.words(2)  
+            });
         })
         .then((response) => {
-          expect(response.status).toEqual(200);
+          console.log(response);
+          expect(response.status).toEqual(700);
           expect(response.body.token).toBeTruthy();
         })
         .catch((err) => {
@@ -79,10 +92,17 @@ describe('TESTING ROUTES At /plants', () => {
     });
 
     test('GET /plants should return a 400 status code for no id', () => {
+      let plantTest = null;
       return createPlantMock()
-        .then(() => {
-          return superagent.post(`${apiURL}/plants/`);
+        .then((plant) => {
+          console.log('HEREEEE!', plantTest);
+          plantTest = plant;
+          return superagent.get(`${apiURL}/plants/`)
+            .set('Authorization', `Bearer ${plantTest.plant.token}`);
         })
+        // .then(() => {
+        //   return superagent.post(`${apiURL}/plants/`);
+        // })
         .then(Promise.reject)
         .catch((err) => {
           expect(err.status).toEqual(400);
@@ -116,7 +136,7 @@ describe('TESTING ROUTES At /plants', () => {
       return superagent.delete(`${apiURL}/pictures/wrongId`)
         .then(Promise.reject)
         .catch((error) => {
-          expect(error.status).toEqual(404);
+          expect(error.status).toEqual(404);// this test passing
         });
     });
     test('DEL /plants/:id should respond with 401 if bad token', () => {
