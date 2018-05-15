@@ -41,4 +41,14 @@ accountRouter.get('/login', basicAuthMiddleware, (request, response, next) => {
     .catch(next);
 });
 
+accountRouter.put('/accounts/:id', basicAuthMiddleware, jsonParser, (request, response, next) => {
+  const options = { runValidators: true, new: true };
+  return Account.findByIdAndUpdate(request.params.id, request.body, options)
+    .then((accountToUpdate) => {
+      logger.log(logger.INFO, 'PUT - responding with a 200 status code.');
+      return response.json(accountToUpdate);
+    })
+    .catch(next);
+});
+
 export default accountRouter;

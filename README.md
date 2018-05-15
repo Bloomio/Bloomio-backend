@@ -47,4 +47,6 @@ npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-error
 - 05-14-2018 1:04PM - Account Schema added.
 - 05-14-2018 2:05PM - Profile Schema added.
 - 05-14-2018 5:06PM - Profile GET route added.
+- 05-14-2018 8:32PM - Documentation reformatted.
+
  

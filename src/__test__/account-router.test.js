@@ -66,4 +66,65 @@ describe('ACCOUNT-ROUTER', () => {
         });
     });
   });
+
+  describe('PUT /accounts/:id', () => {
+    test('PUT - should return a 200 status code and update selected field.', () => {
+      let putAcctMock = null;
+      return createAccountMock()
+        .then((acctSetMock) => {
+          putAcctMock = acctSetMock;
+          return superagent.put(`${apiURL}/accounts/${putAcctMock.account._id}`)
+            .auth(putAcctMock.request.username, putAcctMock.request.password)
+            .send({ username: 'Vinny', email: 'thevinster@gregor.com' });
+        })
+        .then((response) => {
+          expect(response.status).toEqual(200);
+          expect(response.body.username).toEqual('Vinny');
+          expect(response.body.email).toEqual('thevinster@gregor.com');
+        });
+    });
+    test('PUT - should respond with a 400 if profile not found.', () => {
+      return createAccountMock()
+        .then(() => {
+          return superagent.put(`${apiURL}/accounts/invalidID`)
+            .send({ name: 'John Doe' });
+        })
+        .catch((error) => {
+          expect(error.status).toEqual(400);
+        });
+    });
+    test('PUT - should respond with a 400 if new property is invalid.', () => {
+      let putAcctMock = null;
+      return createAccountMock()
+        .then((acctSetMock) => {
+          putAcctMock = acctSetMock;
+          return superagent.put(`${apiURL}/accounts/${putAcctMock.account._id}`)
+            .auth(putAcctMock.request.username, putAcctMock.request.password)
+            .send({ username: '' });
+        })
+        .then(Promise.reject)
+        .catch((error) => {
+          expect(error.status).toEqual(400);
+        });
+    });
+  });
+
+  // describe('DELETE /accounts/:id', () => {
+  //   test('DELETE - should return a 204 status code if the account was successfully deleted.', () => {
+  //     let putAcctMock = null;
+  //     return createAccountMock()
+  //       .then((acctSetMock) => {
+  //         putAcctMock = acctSetMock;
+  //         console.log('putAcct', putAcctMock);
+  //         return superagent.put(`${apiURL}/accounts/${putAcctMock.account._id}`)
+  //           .auth(putAcctMock.request.username, putAcctMock.request.password)
+  //           .send({ username: 'Vinny', email: 'thevinster@gregor.com' });
+  //       })
+  //       .then((response) => {
+  //         expect(response.status).toEqual(200);
+  //         expect(response.body.username).toEqual('Vinny');
+  //         expect(response.body.email).toEqual('thevinster@gregor.com');
+  //       });
+  //   });
+  // });
 });
