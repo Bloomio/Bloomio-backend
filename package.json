@@ -46,14 +46,17 @@
     "winston": "^3.0.0-rc5"
   },
   "dependencies": {
+    "agenda": "^1.0.3",
     "aws-sdk": "^2.236.1",
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
     "crypto": "^1.0.1",
+    "datejs": "^1.0.0-rc3",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "faker": "^4.1.0",
     "fs-extra": "^6.0.1",
+    "googleapis": "^30.0.0",
     "http-errors": "^1.6.3",
     "jsonwebtoken": "^8.2.1",
     "mongoose": "^5.0.17",
