@@ -2,19 +2,19 @@
 
 import superagent from 'superagent';
 import { startServer, stopServer } from '../lib/server';
-// import { createPlantMock, removePlantMock } from './lib/plant-mock';
-// import { createProfileMock, removeProfileMock } from './lib/profile-mock';
+import { createPlantMock, removePlantMock } from './lib/plant-mock';
+import { createProfileMock, removeProfileMock } from './lib/profile-mock';
 import { createAdminMock, removeAdminMock } from './lib/admin-mock';
-// import { createPlantResourceMock, removePlantResourceMock } from './lib/plant-resource-mock';
+import { createPlantResourceMock, removePlantResourceMock } from './lib/plant-resource-mock';
 
 const apiURL = `http://localhost:${process.env.PORT}`;
 
 describe('PLANT-RESOURCE SCHEMA', () => {
   beforeAll(startServer);
-  // afterEach(removeProfileMock);
+  afterEach(removeProfileMock);
   afterEach(removeAdminMock);
-  // afterEach(removePlantMock);
-  // afterEach(removePlantResourceMock);
+  afterEach(removePlantMock);
+  afterEach(removePlantResourceMock);
   afterAll(stopServer);
 
   describe('POST /entry', () => {

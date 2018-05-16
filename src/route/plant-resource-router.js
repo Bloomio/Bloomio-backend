@@ -15,7 +15,7 @@ const jsonParser = json();
 const plantResourceRouter = new Router();
 
 plantResourceRouter.post('/entry', bearerAuthMiddleware, jsonParser, (request, response, next) => {
-  console.log('TOP OF POST', request.body);
+  console.log('TOP OF POST', request);
   // if (!request.account.isAdmin) {
   //   return next(new HttpError(401, 'Unauthorized'));
   // }
