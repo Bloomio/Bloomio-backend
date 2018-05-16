@@ -97,9 +97,9 @@ describe('PLANT-RESOURCE SCHEMA', () => {
 
   describe('GET /plants/:id', () => {
     test('GET - should return a 200 status code and the specified plant.', () => {
-      return createAdminMock();
       let plantTemplateTest = null;
-      return createPlantResourceMock()
+      return createAdminMock();
+        .then() createPlantResourceMock()
         .then((plantTemplate) => {
           console.log(plantTemplateTest.account._id);
           plantTemplateTest = plantTemplate;
