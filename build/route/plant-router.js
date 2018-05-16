@@ -24,6 +24,10 @@ var _logger = require('../lib/logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
+var _profile = require('../model/profile');
+
+var _profile2 = _interopRequireDefault(_profile);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var jsonParser = (0, _bodyParser.json)();
@@ -34,9 +38,13 @@ plantRouter.post('/plants', _bearerAuthMiddleware2.default, jsonParser, function
   if (!request.body.commonName || !request.body.placement) {
     return next(new _httpErrors2.default(400, 'invalid request.'));
   }
-  return new _plant2.default(request.body).save().then(function (plant) {
-    _logger2.default.log(_logger2.default.INFO, 'POST - responding with a 200 status code.');
-    return response.json(plant);
+  return _profile2.default.findOne({ account: request.account._id }).then(function (profile) {
+    request.body.profile = profile._id;
+  }).then(function () {
+    return new _plant2.default(request.body).save().then(function (plant) {
+      _logger2.default.log(_logger2.default.INFO, 'POST - responding with a 200 status code.');
+      return response.json(plant);
+    });
   }).catch(next);
 });
 

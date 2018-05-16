@@ -16,12 +16,11 @@ const createPlantMock = () => {
         scientificName: faker.lorem.words(2),
         groupType: faker.lorem.words(2),
         placement: faker.lorem.words(2),
-      //  profile: resultMock.profileMock.profile_id,
+        profile: resultMock.profileMock.profile._id,
       }).save();
     })
     .then((plant) => {
       resultMock.plant = plant;
-      // console.log('PLANT MOCK: resultMock ', resultMock);
       return resultMock;
     });
 };

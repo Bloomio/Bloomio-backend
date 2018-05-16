@@ -43,6 +43,18 @@ profileRouter.post('/profile', _bearerAuthMiddleware2.default, jsonParser, funct
   }).catch(next);
 });
 
+profileRouter.get('/profile/:id/planterbox', _bearerAuthMiddleware2.default, function (request, response, next) {
+  var plantCollection = null;
+  return _profile2.default.findById(request.params.id).then(function (profile) {
+    if (!profile) {
+      return next(new _httpErrors2.default(404, 'User not found, invalid id.'));
+    }
+    plantCollection = profile.planterBox;
+    _logger2.default.log(_logger2.default.INFO, 'GET - responding with a 200 status code');
+    return response.json(plantCollection);
+  }).catch(next);
+});
+
 profileRouter.get('/profile/:id', _bearerAuthMiddleware2.default, function (request, response, next) {
   return _profile2.default.findById(request.params.id).then(function (profile) {
     if (!profile) {

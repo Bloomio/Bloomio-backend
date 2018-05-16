@@ -13,18 +13,6 @@ var _mongoose = require('mongoose');
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
-var _googleapis = require('googleapis');
-
-var _googleapis2 = _interopRequireDefault(_googleapis);
-
-var _datejs = require('datejs');
-
-var _datejs2 = _interopRequireDefault(_datejs);
-
-var _twilio = require('twilio');
-
-var _twilio2 = _interopRequireDefault(_twilio);
-
 var _logger = require('./logger');
 
 var _logger2 = _interopRequireDefault(_logger);
@@ -45,13 +33,13 @@ var _plantRouter = require('../route/plant-router');
 
 var _plantRouter2 = _interopRequireDefault(_plantRouter);
 
-var _config = require('../lib/config');
-
-var _config2 = _interopRequireDefault(_config);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
+// import google from 'googleapis';
+// import date from 'datejs';
+// import twilio from 'twilio';
+
 var server = null;
 
 // routes will be app.use'd here

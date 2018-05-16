@@ -10,6 +10,8 @@ var _accountMock = require('./lib/account-mock');
 
 var _profileMock = require('./lib/profile-mock');
 
+var _plantMock = require('./lib/plant-mock');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var apiURL = 'http://localhost:' + process.env.PORT;
@@ -124,6 +126,16 @@ describe('PROFILE SCHEMA', function () {
           return _superagent2.default.get(apiURL + '/profile/badID').set('Authorization', 'Bearer ' + profileMock.accountSetMock.token).then(Promise.reject).catch(function (error) {
             expect(error.status).toEqual(404);
           });
+        });
+      });
+    });
+    test('GET - should return a 200 and the planterbox collection from a user.', function () {
+      var collectionMock = null;
+      return (0, _plantMock.createPlantMock)().then(function (plantSetMock) {
+        collectionMock = plantSetMock;
+        return _superagent2.default.get(apiURL + '/profile/' + collectionMock.profileMock.profile._id + '/planterbox').set('Authorization', 'Bearer ' + collectionMock.profileMock.accountSetMock.token).then(function (response) {
+          expect(response.status).toEqual(200);
+          expect(Array.isArray(response.body)).toBeTruthy();
         });
       });
     });

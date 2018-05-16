@@ -27,6 +27,20 @@ profileRouter.post('/profile', bearerAuthMiddleware, jsonParser, (request, respo
     .catch(next);
 });
 
+profileRouter.get('/profile/:id/planterbox', bearerAuthMiddleware, (request, response, next) => {
+  let plantCollection = null;
+  return Profile.findById(request.params.id)
+    .then((profile) => {
+      if (!profile) {
+        return next(new HttpError(404, 'User not found, invalid id.'));
+      }
+      plantCollection = profile.planterBox;
+      logger.log(logger.INFO, 'GET - responding with a 200 status code');
+      return response.json(plantCollection);
+    })
+    .catch(next);
+});
+
 profileRouter.get('/profile/:id', bearerAuthMiddleware, (request, response, next) => {
   return Profile.findById(request.params.id)
     .then((profile) => {

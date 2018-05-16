@@ -4,6 +4,7 @@ import superagent from 'superagent';
 import { startServer, stopServer } from '../lib/server';
 import { createAccountMock } from './lib/account-mock';
 import { removeProfileMock, createProfileMock } from './lib/profile-mock';
+import { createPlantMock } from './lib/plant-mock';
 
 const apiURL = `http://localhost:${process.env.PORT}`;
 
@@ -161,6 +162,19 @@ describe('PROFILE SCHEMA', () => {
               });
           });
       });
+    });
+    test('GET - should return a 200 and the planterbox collection from a user.', () => {
+      let collectionMock = null;
+      return createPlantMock()
+        .then((plantSetMock) => {
+          collectionMock = plantSetMock;
+          return superagent.get(`${apiURL}/profile/${collectionMock.profileMock.profile._id}/planterbox`)
+            .set('Authorization', `Bearer ${collectionMock.profileMock.accountSetMock.token}`)
+            .then((response) => {
+              expect(response.status).toEqual(200);
+              expect(Array.isArray(response.body)).toBeTruthy();
+            });
+        });
     });
   });
 

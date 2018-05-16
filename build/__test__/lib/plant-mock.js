@@ -30,12 +30,11 @@ var createPlantMock = function createPlantMock() {
       commonName: _faker2.default.lorem.words(2),
       scientificName: _faker2.default.lorem.words(2),
       groupType: _faker2.default.lorem.words(2),
-      placement: _faker2.default.lorem.words(2)
-      //  profile: resultMock.profileMock.profile_id,
+      placement: _faker2.default.lorem.words(2),
+      profile: resultMock.profileMock.profile._id
     }).save();
   }).then(function (plant) {
     resultMock.plant = plant;
-    // console.log('PLANT MOCK: resultMock ', resultMock);
     return resultMock;
   });
 };
