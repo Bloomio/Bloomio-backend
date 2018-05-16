@@ -3,7 +3,7 @@ process.env.PORT = 7000;
 process.env.MONGODB_URI = 'mongodb://localhost/testing5';
 process.env.BLOOMIO_SECRET = 'top secret';
 
-const isAwsMock = false;
+const isAwsMock = true;
 
 if (isAwsMock) {
   process.env.AWS_BUCKET = 'fake';
