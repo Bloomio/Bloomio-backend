@@ -59,6 +59,9 @@ const plantSchema = mongoose.Schema({
   plantJournal: {
     type: String,
   },
+  image: {
+    type: String,
+  },
   profile: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'profile',
