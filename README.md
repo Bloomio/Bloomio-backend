@@ -2,9 +2,6 @@
 
 **```Author```**```: Daniel Shelton, Joanna Coll, Jennifer Piper, David Stoll```
 
-**```Version```**```: 1.0.0```
-
-
 
 ## Overview
 [![Build Status](https://travis-ci.org/Bloomio/Bloomio-backend.svg?branch=staging)](https://travis-ci.org/Bloomio/Bloomio-backend)
@@ -13,10 +10,8 @@
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Bloomio/Bloomio-backend)
 [![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/Bloomio/Bloomio-backend)
 [![jest](https://facebook.github.io/jest/img/jest-badge.svg)](https://github.com/Bloomio/Bloomio-backend)
-[![Coverage Status](https://coveralls.io/repos/github/CityOfZion/neon-wallet/badge.svg?branch=master)](https://coveralls.io/github/CityOfZion/neon-wallet?branch=staging)
 
-
-
+**```Version```**```: 1.0.0```
 
 **Bloomio** is a calendar-assistant app designed to assist in caring for one's plants and also utilizes an extensive database of comprehensive plant-care directions. Users are able to specify their personal collections of plants they own and **Bloomio** will take care of notifying the user which plants are due for watering. 
 
@@ -77,6 +72,23 @@ npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-error
 - 05-15-2018 11:30AM - Tests for Plant Schema GET and DELETE routes passing.
 - 05-14-2018 01:36PM - PUT route for Plant Schema added and test passing.
 - 05-15-2018 05:30PM - POST and GET route for plantBox are added and tested.
-- 05-15-2018 01:36PM -
+- 05-15-2018 01:36PM - PlantResource Schema added and passing test.
 - 05-15-2018 01:36PM -
 - 05-15-2018 01:36PM - 
+
+
+TESTING
+response time
+latency
+percentile
+create simple-load-test.json:
+duration: testing time 5,10secs
+arrivalRate: how many users per second 20
+scenarios: steps users take to break the app => do post request
+npm run start
+artillery run simple-load-test.json => 
+codes: 
+200:1 time
+409:99  99 times 409 showed for users
+
+latency: p95: 34.2 95% reponses were faster than 34.2

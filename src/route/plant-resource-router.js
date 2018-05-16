@@ -9,29 +9,35 @@ import Plant from '../model/plant';
 import bearerAuthMiddleware from '../lib/bearer-auth-middleware';
 import logger from '../lib/logger';
 import Profile from '../model/profile';
+import PlantResource from '../model/plant-resource';
 
 const jsonParser = json();
-const plantRouter = new Router();
+const plantResourceRouter = new Router();
 
-plantRouter.post('/plants', bearerAuthMiddleware, jsonParser, (request, response, next) => {
-  if (!request.body.commonName || !request.body.placement) {
-    return next(new HttpError(400, 'invalid request.'));
+plantResourceRouter.post('/entry', bearerAuthMiddleware, jsonParser, (request, response, next) => {
+  console.log('TOP OF POST', request.body);
+  // if (!request.account.isAdmin) {
+  //   return next(new HttpError(401, 'Unauthorized'));
+  // }
+  if (!request.body.commonName || !request.body.scientificName || !request.body.groupType
+     || !request.body.waterDate || !request.body.fertilizerDate || !request.body.mistingDate) {
+    return next(new HttpError(400, 'Invalid request, ALL properties required.'));
   }
   return Profile.findOne({ account: request.account._id })
     .then((profile) => {
       request.body.profile = profile._id;
     })
     .then(() => {
-      return new Plant(request.body).save()
-        .then((plant) => {
+      return new PlantResource(request.body).save()
+        .then((plantRes) => {
           logger.log(logger.INFO, 'POST - responding with a 200 status code.');
-          return response.json(plant);
+          return response.json(plantRes);
         });
     })
     .catch(next);
 });
 
-plantRouter.get('/plants/:id', bearerAuthMiddleware, (request, response, next) => {
+plantResourceRouter.get('/plants/:id', bearerAuthMiddleware, (request, response, next) => {
   return Plant.findById(request.params.id)
     .then((plant) => {
       if (!plant) {
@@ -44,7 +50,7 @@ plantRouter.get('/plants/:id', bearerAuthMiddleware, (request, response, next) =
     .catch(next);
 });
 
-plantRouter.put('/plants/:id', bearerAuthMiddleware, jsonParser, (request, response, next) => {
+plantResourceRouter.put('/plants/:id', bearerAuthMiddleware, jsonParser, (request, response, next) => {
   const options = { runValidators: true, new: true };
   return Plant.findByIdAndUpdate(request.params.id, request.body, options)
     .then((updatedPlant) => {
@@ -57,7 +63,7 @@ plantRouter.put('/plants/:id', bearerAuthMiddleware, jsonParser, (request, respo
     .catch(next);
 });
 
-plantRouter.delete('/plants/:id', bearerAuthMiddleware, (request, response, next) => {
+plantResourceRouter.delete('/plants/:id', bearerAuthMiddleware, (request, response, next) => {
   return Plant.findByIdAndRemove(request.params.id)
     .then((plant) => {
       if (!plant) {
@@ -67,4 +73,4 @@ plantRouter.delete('/plants/:id', bearerAuthMiddleware, (request, response, next
     });
 });
 
-export default plantRouter;
+export default plantResourceRouter;

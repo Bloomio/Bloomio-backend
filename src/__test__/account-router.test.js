@@ -57,6 +57,8 @@ describe('ACCOUNT-ROUTER', () => {
     test('GET - should respond with a 200 status code AND a TOKEN.', () => {
       return createAccountMock()
         .then((mock) => {
+          console.log('::::::::::::::::::::::::::::::::::::', mock);
+          
           return superagent.get(`${apiURL}/login`)
             .auth(mock.request.username, mock.request.password);
         })
