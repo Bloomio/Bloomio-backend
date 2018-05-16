@@ -33,19 +33,23 @@ var _plantRouter = require('../route/plant-router');
 
 var _plantRouter2 = _interopRequireDefault(_plantRouter);
 
+var _plantResourceRouter = require('../route/plant-resource-router');
+
+var _plantResourceRouter2 = _interopRequireDefault(_plantResourceRouter);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var app = (0, _express2.default)();
 // import google from 'googleapis';
 // import date from 'datejs';
 // import twilio from 'twilio';
-
+var app = (0, _express2.default)();
 var server = null;
 
 // routes will be app.use'd here
 app.use(_accountRouter2.default);
 app.use(_profileRouter2.default);
 app.use(_plantRouter2.default);
+app.use(_plantResourceRouter2.default);
 
 app.all('*', function (request, response) {
   _logger2.default.log(_logger2.default.INFO, 'Returning a 404 from the catch-all/default route');

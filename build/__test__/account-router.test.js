@@ -53,6 +53,8 @@ describe('ACCOUNT-ROUTER', function () {
   describe('GET /login', function () {
     test('GET - should respond with a 200 status code AND a TOKEN.', function () {
       return (0, _accountMock.createAccountMock)().then(function (mock) {
+        console.log('::::::::::::::::::::::::::::::::::::', mock);
+
         return _superagent2.default.get(apiURL + '/login').auth(mock.request.username, mock.request.password);
       }).then(function (response) {
         expect(response.status).toEqual(200);

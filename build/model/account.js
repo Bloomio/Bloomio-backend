@@ -49,6 +49,10 @@ var accountSchema = _mongoose2.default.Schema({
     required: true,
     unique: true
   },
+  isAdmin: {
+    type: Boolean,
+    default: false
+  },
   createdOn: {
     type: Date,
     default: function _default() {
