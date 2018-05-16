@@ -27,6 +27,20 @@ profileRouter.post('/profile', bearerAuthMiddleware, jsonParser, (request, respo
     .catch(next);
 });
 
+profileRouter.get('/profile/:id/planterbox', bearerAuthMiddleware, (request, response, next) => {
+  let plantCollection = null;
+  return Profile.findById(request.params.id)
+    .then((profile) => {
+      if (!profile) {
+        return next(new HttpError(404, 'User not found, invalid id.'));
+      }
+      plantCollection = profile.planterBox;
+      logger.log(logger.INFO, 'GET - responding with a 200 status code');
+      return response.json(plantCollection);
+    })
+    .catch(next);
+});
+
 profileRouter.get('/profile/:id', bearerAuthMiddleware, (request, response, next) => {
   return Profile.findById(request.params.id)
     .then((profile) => {
@@ -35,6 +49,28 @@ profileRouter.get('/profile/:id', bearerAuthMiddleware, (request, response, next
       }
       logger.log(logger.INFO, 'GET - responding with a 200 status code');
       return response.json(profile);
+    })
+    .catch(next);
+});
+
+profileRouter.put('/profile/:id', bearerAuthMiddleware, jsonParser, (request, response, next) => {
+  const options = { runValidators: true, new: true };
+  return Profile.findByIdAndUpdate(request.params.id, request.body, options)
+    .then((updatedProfile) => {
+      if (!updatedProfile) {
+        return next(new HttpError(404, 'Profile not found, invalid id.'));
+      }
+      logger.log(logger.INFO, 'PROFILE: PUT - responding with 200');
+      return response.json(updatedProfile);
+    })
+    .catch(next);
+});
+
+profileRouter.delete('/profile/:id', bearerAuthMiddleware, (request, response, next) => {
+  return Profile.findByIdAndRemove(request.params.id)
+    .then(() => {
+      logger.log(logger.INFO, 'PROFILE: DELETE - responding with 204');
+      return response.sendStatus(204);
     })
     .catch(next);
 });

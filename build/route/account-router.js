@@ -56,4 +56,19 @@ accountRouter.get('/login', _basicAuthMiddleware2.default, function (request, re
   }).catch(next);
 });
 
+accountRouter.put('/accounts/:id', _basicAuthMiddleware2.default, jsonParser, function (request, response, next) {
+  var options = { runValidators: true, new: true };
+  return _account2.default.findByIdAndUpdate(request.params.id, request.body, options).then(function (accountToUpdate) {
+    _logger2.default.log(_logger2.default.INFO, 'PUT - responding with a 200 status code.');
+    return response.json(accountToUpdate);
+  }).catch(next);
+});
+
+accountRouter.delete('/accounts/:id', _basicAuthMiddleware2.default, function (request, response, next) {
+  return _account2.default.findByIdAndRemove(request.params.id).then(function () {
+    _logger2.default.log(_logger2.default.INFO, 'DELETE - Account successfully deleted.');
+    return response.sendStatus(204);
+  }).catch(next);
+});
+
 exports.default = accountRouter;

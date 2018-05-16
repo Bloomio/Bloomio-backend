@@ -60,4 +60,51 @@ describe('ACCOUNT-ROUTER', function () {
       });
     });
   });
+
+  describe('PUT /accounts/:id', function () {
+    test('PUT - should return a 200 status code and update selected field.', function () {
+      var putAcctMock = null;
+      return (0, _accountMock.createAccountMock)().then(function (acctSetMock) {
+        putAcctMock = acctSetMock;
+        return _superagent2.default.put(apiURL + '/accounts/' + putAcctMock.account._id).auth(putAcctMock.request.username, putAcctMock.request.password).send({ username: 'Vinny', email: 'thevinster@gregor.com' });
+      }).then(function (response) {
+        expect(response.status).toEqual(200);
+        expect(response.body.username).toEqual('Vinny');
+        expect(response.body.email).toEqual('thevinster@gregor.com');
+      });
+    });
+    test('PUT - should respond with a 400 if profile not found.', function () {
+      return (0, _accountMock.createAccountMock)().then(function () {
+        return _superagent2.default.put(apiURL + '/accounts/invalidID').send({ name: 'John Doe' });
+      }).catch(function (error) {
+        expect(error.status).toEqual(400);
+      });
+    });
+    test('PUT - should respond with a 400 if new property is invalid.', function () {
+      var putAcctMock = null;
+      return (0, _accountMock.createAccountMock)().then(function (acctSetMock) {
+        putAcctMock = acctSetMock;
+        return _superagent2.default.put(apiURL + '/accounts/' + putAcctMock.account._id).auth(putAcctMock.request.username, putAcctMock.request.password).send({ username: '' });
+      }).then(Promise.reject).catch(function (error) {
+        expect(error.status).toEqual(400);
+      });
+    });
+  });
+
+  describe('DELETE /accounts/:id', function () {
+    test('DELETE - should return a 204 status code if the account was successfully deleted.', function () {
+      var putAcctMock = null;
+      return (0, _accountMock.createAccountMock)().then(function (acctSetMock) {
+        putAcctMock = acctSetMock;
+        return _superagent2.default.delete(apiURL + '/accounts/' + putAcctMock.account._id).auth(putAcctMock.request.username, putAcctMock.request.password);
+      }).then(function (response) {
+        expect(response.status).toEqual(204);
+      });
+    });
+    test('DELETE - should respond with 400 if no account found.', function () {
+      return _superagent2.default.delete(apiURL + '/accounts/THisIsAnInvalidId').then(Promise.reject).catch(function (response) {
+        expect(response.status).toEqual(400);
+      });
+    });
+  });
 });
