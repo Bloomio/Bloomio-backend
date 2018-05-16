@@ -4,17 +4,6 @@ import moment from 'moment';
 import { startServer, stopServer } from '../lib/server';
 import Plant from '../model/plant';
 
-function calculateNextWaterDate(plant) {
-  plant.nextWaterDate = moment(plant.lastWaterDate).add(plant.waterInterval, 'days');
-  return plant;
-}
-
-function isTimeToWater(plant) {
-  const currentTime = moment();
-  if (currentTime >= plant.nextWaterDate) {
-    return true;
-  } return false;
-}
 
 // moment() returns an object, but plant.nextWaterDate is a JS Date.
 // Convert a moment() object into a JS Date by wrapping it in new Date();
@@ -29,42 +18,41 @@ describe('Plant watering schedule', () => {
       const testPlant = new Plant();
       testPlant.lastWaterDate = moment('2018-01-01').startOf('day');
       testPlant.waterInterval = 1;
-      const testWaterDate = new Date(moment('2018-01-02').startOf('day'))
-      expect(calculateNextWaterDate(testPlant).nextWaterDate).toEqual(testWaterDate);
+      const testWaterDate = new Date(moment('2018-01-02').startOf('day'));
+      expect(testPlant.calculateNextWaterDate().nextWaterDate).toEqual(testWaterDate);
     });
     test('should correctly add 3 days', () => {
       const testPlant = new Plant();
       testPlant.lastWaterDate = moment('2018-01-01').startOf('day');
       testPlant.waterInterval = 3;
-      const testWaterDate = new Date(moment('2018-01-04').startOf('day'))
-      expect(calculateNextWaterDate(testPlant).nextWaterDate).toEqual(testWaterDate);
+      const testWaterDate = new Date(moment('2018-01-04').startOf('day'));
+      expect(testPlant.calculateNextWaterDate().nextWaterDate).toEqual(testWaterDate);
     });
     test('should correctly add 35 days', () => {
       const testPlant = new Plant();
       testPlant.lastWaterDate = moment('2018-07-01').startOf('day');
       testPlant.waterInterval = 35;
-      const testWaterDate = new Date(moment('2018-08-05').startOf('day'))
-      expect(calculateNextWaterDate(testPlant).nextWaterDate).toEqual(testWaterDate);
+      const testWaterDate = new Date(moment('2018-08-05').startOf('day'));
+      expect(testPlant.calculateNextWaterDate().nextWaterDate).toEqual(testWaterDate);
     });
     test('should correctly add 365 days', () => {
       const testPlant = new Plant();
       testPlant.lastWaterDate = moment('2018-07-01').startOf('day');
       testPlant.waterInterval = 365;
-      const testWaterDate = new Date(moment('2019-07-01').startOf('day'))
-      expect(calculateNextWaterDate(testPlant).nextWaterDate).toEqual(testWaterDate);
+      const testWaterDate = new Date(moment('2019-07-01').startOf('day'));
+      expect(testPlant.calculateNextWaterDate().nextWaterDate).toEqual(testWaterDate);
     });
   });
   describe('isTimeToWater', () => {
     test('should return true for nextWaterDate dates in the past', () => {
       const testPlant = new Plant();
       testPlant.nextWaterDate = moment('2018-01-01');
-      expect(isTimeToWater(testPlant)).toEqual(true);
+      expect(testPlant.isTimeToWater()).toEqual(true);
     });
     test('should return false for nextWaterDate dates in the future', () => {
       const testPlant = new Plant();
       testPlant.nextWaterDate = moment('3018-01-01');
-      expect(isTimeToWater(testPlant)).toEqual(false);
+      expect(testPlant.isTimeToWater()).toEqual(false);
     });
   });
 });
-

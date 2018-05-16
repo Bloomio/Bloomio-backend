@@ -1,5 +1,6 @@
 'use strict';
 
+import moment from 'moment';
 import mongoose from 'mongoose';
 import HttpError from 'http-errors';
 import Profile from './profile';
@@ -24,7 +25,6 @@ const plantSchema = mongoose.Schema({
   },
   createdOn: { 
     type: Date,
-    // required: true,
     default: () => new Date(),
   },
   lastWaterDate: {
@@ -35,17 +35,29 @@ const plantSchema = mongoose.Schema({
     type: Number,
     default: 3,
   },
-  nextWaterDate: {// .pre before saving water schedule calculate the date intervals
+  nextWaterDate: {
     type: Date,
   },
-  fertilizerDate: {
+  lastFertilizerDate: {
+    type: Date,
+  },
+  fertilizerInterval: {
     type: Number,
   },
-  mistingDate: {
+  nextFertilizerDate: {
+    type: Date,
+  },
+  lastMistingDate: {
+    type: Date,
+  },
+  mistingInterval: {
     type: Number,
+  },
+  nextMistingDate: {
+    type: Date,
   },
   plantJournal: {
-    type: Number,
+    type: String,
   },
   profile: {
     type: mongoose.Schema.Types.ObjectId,
@@ -54,6 +66,17 @@ const plantSchema = mongoose.Schema({
   },
 });
 
+plantSchema.methods.calculateNextWaterDate = function calculateNextWaterDate() {
+  this.nextWaterDate = moment(this.lastWaterDate).add(this.waterInterval, 'days');
+  return this;
+};
+
+plantSchema.methods.isTimeToWater = function isTimeToWater() {
+  const currentTime = moment();
+  if (currentTime >= this.nextWaterDate) {
+    return true;
+  } return false;
+};
 
 function plantPreHook(done) {
   return Profile.findById(this.profile)
@@ -61,6 +84,7 @@ function plantPreHook(done) {
       if (!profileFound) {
         throw new HttpError(404, 'Profile not found.');
       }
+      this.calculateNextWaterDate();
       profileFound.planterBox.push(this._id);
       return profileFound.save();
     })
