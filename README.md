@@ -7,6 +7,7 @@
 **Bloomio** is a calendar-assistant app designed to assist in caring for one's plants and also utilizes an extensive database of comprehensive plant-care directions. Users are able to specify their personal collections of plants they own and **Bloomio** will take care of notifying the user which plants are due for watering. 
 
 # Getting Started
+
 ## Initialize Project
 ```
 npm init -y
@@ -17,7 +18,7 @@ npm i -D aws-sdk-mock babel-cli babel-eslint babel-preset-env babel-preset-stage
 ```
 ## Dependencies
 ```
-npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-errors jsonwebtoken mongoose multer twilio
+npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-errors jsonwebtoken mongoose multer twilio mongodb 
 ```
 
 # API routes
@@ -26,10 +27,12 @@ npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-error
   2. Profile
     - POST /profile
     - GET /profile/:id
+    
   3. Plant
     - POST /plant
     - GET /plant/:id
     - PUT /plant/id
+  
 
 # Version Release Schedule
 
@@ -45,12 +48,17 @@ npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-error
 
 ## v 1.1.0
 - 05-14-2018 1:04PM - Account Schema added.
-- 05-14-2018 2:05PM - Profile Schema added.
+- 05-14-2018 2:05PM - Profile Schema and Plant Schema added.
+- 05-14-2018 4:05PM - Routes for Plant Schema finished.
 - 05-14-2018 5:06PM - Profile GET route added.
 - 05-14-2018 8:32PM - Documentation reformatted.
+- 05-14-2018 4:05PM - Tests for Plant Schema POST routes passing.
 - 05-14-2018 9:44PM - Account PUT routes added/tests passing.
 - 05-14-2018 10:04PM - Account DELETE routes added/tests passing.
 - 05-14-2018 10:36PM - Profile 409 PUT test passing.
-
-
- 
+- 05-15-2018 11:30AM - Tests for Plant Schema GET and DELETE routes passing.
+- 05-14-2018 01:36PM - PUT route for Plant Schema added and test passing.
+- 05-15-2018 01:36PM - 
+- 05-15-2018 01:36PM -
+- 05-15-2018 01:36PM -
+- 05-15-2018 01:36PM - 
