@@ -1,22 +1,23 @@
+![bloomio-logo](./src/assets/bloomio-logo.png)
+
+**```Author```**```: Daniel Shelton, Joanna Coll, Jennifer Piper, David Stoll```
+
+**```Version```**```: 1.0.0```
+
+
+
+## Overview
 [![Build Status](https://travis-ci.org/Bloomio/Bloomio-backend.svg?branch=staging)](https://travis-ci.org/Bloomio/Bloomio-backend)
 [![Build Status](https://travis-ci.org/Bloomio/Bloomio-backend.svg?branch=master)](https://travis-ci.org/Bloomio/Bloomio-backend)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/Bloomio/Bloomio-backend/network)
-[![GitHub release](https://img.shields.io/github/release/Naereen/StrapDown.js.svg)](https://travis-ci.org/Bloomio/Bloomio-backend.svg?branch=master)
-[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
-
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Bloomio/Bloomio-backend)
+[![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/Bloomio/Bloomio-backend)
+[![jest](https://facebook.github.io/jest/img/jest-badge.svg)](https://github.com/Bloomio/Bloomio-backend)
 [![Coverage Status](https://coveralls.io/repos/github/CityOfZion/neon-wallet/badge.svg?branch=master)](https://coveralls.io/github/CityOfZion/neon-wallet?branch=staging)
 
 
 
 
-**```Author```**```: Daniel Shelton, Joanna Coll, Jennifer Piper, David Stoll```
-
-**Version**: 1.0.0
-
-
-![bloomio-logo](./src/assets/bloomio-logo.png)
-
-# Overview
 **Bloomio** is a calendar-assistant app designed to assist in caring for one's plants and also utilizes an extensive database of comprehensive plant-care directions. Users are able to specify their personal collections of plants they own and **Bloomio** will take care of notifying the user which plants are due for watering. 
 
 # Getting Started

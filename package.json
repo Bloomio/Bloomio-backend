@@ -6,20 +6,20 @@
   "scripts": {
     "mintest": "jest --forceExit --runInBand",
     "test": "jest",
-    "testJ": "eslint . && jest --coverage --forceExit --runInBand" ,
+    "testJ": "eslint . && jest --coverage --forceExit --runInBand",
     "test-nolint": "jest --coverage --forceExit --runInBand",
     "test-console": "jest --coverage",
     "dbon": "mkdir -p ./db && mongod --dbpath ./db",
     "dboff": "killall mongod",
     "build": "babel src -d build",
-    "start": "babel src -d build && node index.js"
+    "start": "babel src -d build && node index.js",
+    "coverage-badge": "coverage-badger -r coverage/clover.xml -d coverage/",
+    "coverage": "npm test -- --coverage && npm run coverage-badge",
+    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
   },
   "jest": {
     "setupFiles": [
       "<rootDir>/src/__test__/lib/test.env.js"
-    ],
-    "coverageReporters": [
-      "json-summary"
     ]
   },
   "repository": {
@@ -40,11 +40,14 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.26.0",
+    "coveralls": "^3.0.1",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jest": "^21.15.1",
+    "istanbul": "^0.4.5",
     "jest": "^22.4.3",
+    "mocha": "^5.1.1",
     "superagent": "^3.8.3",
     "winston": "^3.0.0-rc5"
   },
@@ -54,7 +57,6 @@
     "babel-jest": "^22.4.3",
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
-    "coveralls": "^3.0.1",
     "crypto": "^1.0.1",
     "datejs": "^1.0.0-rc3",
     "dotenv": "^5.0.1",
