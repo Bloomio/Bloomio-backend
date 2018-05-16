@@ -16,6 +16,7 @@ const createPlantMock = () => {
         scientificName: faker.lorem.words(2),
         groupType: faker.lorem.words(2),
         placement: faker.lorem.words(2),
+        image: faker.random.image(),
         profile: resultMock.profileMock.profile._id,
       }).save();
     })

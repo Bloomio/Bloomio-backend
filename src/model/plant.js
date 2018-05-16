@@ -1,5 +1,6 @@
 'use strict';
 
+import moment from 'moment';
 import mongoose from 'mongoose';
 import HttpError from 'http-errors';
 import Profile from './profile';
@@ -24,41 +25,73 @@ const plantSchema = mongoose.Schema({
   },
   createdOn: { 
     type: Date,
-    // required: true,
     default: () => new Date(),
   },
-  waterDate: {// .pre before saving water schedule calculate the date intervals
-    type: Number,
-    // required: true,
+  lastWaterDate: {
+    type: Date,
+    default: () => new Date(),
   },
-  fertilizerDate: {
+  waterInterval: {
+    type: Number,
+    default: 3,
+  },
+  nextWaterDate: {
+    type: Date,
+  },
+  lastFertilizerDate: {
+    type: Date,
+  },
+  fertilizerInterval: {
     type: Number,
   },
-  mistingDate: {
+  nextFertilizerDate: {
+    type: Date,
+  },
+  lastMistingDate: {
+    type: Date,
+  },
+  mistingInterval: {
     type: Number,
+  },
+  nextMistingDate: {
+    type: Date,
   },
   plantJournal: {
-    type: Number,
+    type: String,
+  },
+  image: {
+    type: String,
   },
   profile: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'profile',
-    // required: true,
+    required: true,
   },
 });
 
-function plantPreHook(done) { // done is using an (error, data) signature
-  // here, the value 'contextual this' is the document.
+plantSchema.methods.calculateNextWaterDate = function calculateNextWaterDate() {
+  this.nextWaterDate = moment(this.lastWaterDate).add(this.waterInterval, 'days');
+  return this;
+};
+
+plantSchema.methods.isTimeToWater = function isTimeToWater() {
+  const currentTime = moment();
+  if (currentTime >= this.nextWaterDate) {
+    return true;
+  } return false;
+};
+
+function plantPreHook(done) {
   return Profile.findById(this.profile)
     .then((profileFound) => {
       if (!profileFound) {
         throw new HttpError(404, 'Profile not found.');
       }
+      this.calculateNextWaterDate();
       profileFound.planterBox.push(this._id);
       return profileFound.save();
     })
-    .then(() => done()) // done without any arguments means success.
-    .catch(done); // done with results mean an error
+    .then(() => done());
 }
 
 const plantPostHook = (document, done) => {
