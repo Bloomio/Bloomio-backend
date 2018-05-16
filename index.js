@@ -14,9 +14,3 @@ if (process.env.NODE_ENV !== 'production') {
   console.log('-----PRODUCTION SETTINGS-----');
   require('./build/main');
 }
-
-// if (process.env.NODE_ENV !== 'production') {
-//   require('babel-register');
-// }
-
-// require('./src/main');

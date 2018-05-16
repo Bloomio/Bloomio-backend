@@ -196,6 +196,21 @@ describe('PROFILE SCHEMA', () => {
           expect(response.body.firstName).toEqual('test');
         });
     });
+    test.only('PUT - should return a 200 status code if sucessfully updated profile avatar', () => {
+      let profileToUpdate = null;
+      return createProfileMock()
+        .then((profile) => {
+          profileToUpdate = profile;
+          console.log(profileToUpdate.profile._id);
+          return superagent.put(`${apiURL}/profile/${profileToUpdate.profile._id}/avatar`)
+            .set('Authorization', `Bearer ${profileToUpdate.accountSetMock.token}`)
+            // .field('title', 'dog pic')
+            .attach('pic', `${__dirname}/../assets/dog.jpg`)
+            .then((response) => {
+              expect(response.status).toEqual(200);
+            });
+        });
+    });
     test('PUT - should return a 400 status code for no token being passed.', () => {
       let profileToUpdate = null;
       return createProfileMock()

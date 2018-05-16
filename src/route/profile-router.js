@@ -1,14 +1,18 @@
 'use strict';
 
 import { Router } from 'express';
-import { json } from 'body-parser';
+import { json, urlencoded } from 'body-parser';
 import HttpError from 'http-errors';
+import multer from 'multer';
 
 import Profile from '../model/profile';
 import bearerAuthMiddleware from '../lib/bearer-auth-middleware';
 import logger from '../lib/logger';
+import { s3Upload } from '../lib/s3';
 
 const jsonParser = json();
+const urlParser = urlencoded();
+const multerUpload = multer({ dest: `${__dirname}/../temp` });
 const profileRouter = new Router();
 
 profileRouter.post('/profile', bearerAuthMiddleware, jsonParser, (request, response, next) => {
@@ -63,6 +67,29 @@ profileRouter.put('/profile/:id', bearerAuthMiddleware, jsonParser, (request, re
       logger.log(logger.INFO, 'PROFILE: PUT - responding with 200');
       return response.json(updatedProfile);
     })
+    .catch(next);
+});
+
+profileRouter.put('/profile/:id/avatar', bearerAuthMiddleware, urlParser, jsonParser, multerUpload.any(), (request, response, next) => {
+  const options = { runValidators: true, new: true };
+  return Profile.findByIdAndUpdate(request.params.id, request.body, options)
+    .then((updatedProfile) => {
+      if (!updatedProfile) {
+        console.log('updatedProfile', updatedProfile);
+        return next(new HttpError(404, 'Profile not found, invalid id.')); 
+      }
+      const file = request.files[0];
+      console.log('file', request.files[0]);
+      const key = `${file.filename}.${file.originalname}`;
+      console.log(updatedProfile.avatar);
+
+      return s3Upload(file.path, key)
+        .then((url) => {
+          updatedProfile.avatar = url;
+          console.log(updatedProfile.avatar);
+        }).save();
+    })
+    .then(updatedProfile => response.json(updatedProfile))
     .catch(next);
 });
 
