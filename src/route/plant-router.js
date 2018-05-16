@@ -4,13 +4,17 @@
 import { Router } from 'express';
 import { json } from 'body-parser';
 import HttpError from 'http-errors';
+import multer from 'multer';
 
 import Plant from '../model/plant';
 import bearerAuthMiddleware from '../lib/bearer-auth-middleware';
 import logger from '../lib/logger';
 import Profile from '../model/profile';
+import { s3Upload } from '../lib/s3';
 
 const jsonParser = json();
+const multerUpload = multer({ dest: `${__dirname}/../temp` });
+
 const plantRouter = new Router();
 
 plantRouter.post('/plants', bearerAuthMiddleware, jsonParser, (request, response, next) => {
@@ -54,6 +58,24 @@ plantRouter.put('/plants/:id', bearerAuthMiddleware, jsonParser, (request, respo
       }
       logger.log(logger.INFO, 'PUT - responding with a 200 status code.');
       return response.json(updatedPlant);
+    })
+    .catch(next);
+});
+
+plantRouter.put('/plants/:id/image', bearerAuthMiddleware, jsonParser, multerUpload.any(), (request, response, next) => {
+  const file = request.files[0];
+  const key = `${file.filename}.${file.originalname}`;
+  const options = { funValidators: true, new: true };
+  return s3Upload(file.path, key)
+    .then((url) => {
+      return Plant.findByIdAndUpdate(request.params.id, { image: url }, options)
+        .then((updatedPlant) => {
+          if (!updatedPlant) {
+            return next(new HttpError(404, 'Plant not found, invalid id.'));
+          }
+          return response.json(updatedPlant);
+        })
+        .catch(next);
     })
     .catch(next);
 });
