@@ -27,9 +27,16 @@ const plantSchema = mongoose.Schema({
     // required: true,
     default: () => new Date(),
   },
-  waterDate: {// .pre before saving water schedule calculate the date intervals
+  lastWaterDate: {
+    type: Date,
+    default: () => new Date(),
+  },
+  waterInterval: {
     type: Number,
-    // required: true,
+    default: 3,
+  },
+  nextWaterDate: {// .pre before saving water schedule calculate the date intervals
+    type: Date,
   },
   fertilizerDate: {
     type: Number,
@@ -43,12 +50,12 @@ const plantSchema = mongoose.Schema({
   profile: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'profile',
-    // required: true,
+    required: true,
   },
 });
 
-function plantPreHook(done) { // done is using an (error, data) signature
-  // here, the value 'contextual this' is the document.
+
+function plantPreHook(done) {
   return Profile.findById(this.profile)
     .then((profileFound) => {
       if (!profileFound) {
@@ -57,8 +64,7 @@ function plantPreHook(done) { // done is using an (error, data) signature
       profileFound.planterBox.push(this._id);
       return profileFound.save();
     })
-    .then(() => done()) // done without any arguments means success.
-    .catch(done); // done with results mean an error
+    .then(() => done());
 }
 
 const plantPostHook = (document, done) => {

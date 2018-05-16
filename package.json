@@ -59,6 +59,7 @@
     "googleapis": "^30.0.0",
     "http-errors": "^1.6.3",
     "jsonwebtoken": "^8.2.1",
+    "moment": "^2.22.1",
     "mongoose": "^5.0.17",
     "multer": "^1.3.0",
     "twilio": "^3.17.0"
