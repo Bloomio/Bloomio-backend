@@ -38,14 +38,14 @@ plantResourceRouter.post('/entry', bearerAuthMiddleware, jsonParser, (request, r
 });
 
 plantResourceRouter.get('/plants/:id', bearerAuthMiddleware, (request, response, next) => {
-  return Plant.findById(request.params.id)
-    .then((plant) => {
-      if (!plant) {
+  return PlantResource.findById(request.params.id)
+    .then((plantTemplate) => {
+      if (!plantTemplate) {
         return next(new HttpError(404, 'plant not found.'));
       }
       logger.log(logger.INFO, 'GET - responding with a 200 status code.');
-      logger.log(logger.INFO, `GET - ${JSON.stringify(plant)}`);
-      return response.json(plant);
+      logger.log(logger.INFO, `GET - ${JSON.stringify(plantTemplate)}`);
+      return response.json(plantTemplate);
     })
     .catch(next);
 });
@@ -64,9 +64,9 @@ plantResourceRouter.put('/plants/:id', bearerAuthMiddleware, jsonParser, (reques
 });
 
 plantResourceRouter.delete('/plants/:id', bearerAuthMiddleware, (request, response, next) => {
-  return Plant.findByIdAndRemove(request.params.id)
-    .then((plant) => {
-      if (!plant) {
+  return PlantResource.findByIdAndRemove(request.params.id)
+    .then((plantTemplate) => {
+      if (!plantTemplate) {
         return next(new HttpError(404, 'plant not found.'));
       }
       return response.sendStatus(204);

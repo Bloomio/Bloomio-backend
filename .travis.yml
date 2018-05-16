@@ -3,4 +3,3 @@ node_js:
   - "node"
 services:
   - mongodb
-service_name: travis-pro
