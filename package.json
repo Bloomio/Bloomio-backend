@@ -9,7 +9,7 @@
     "testJ": "eslint . && jest --coverage --forceExit --runInBand",
     "test-nolint": "jest --coverage --forceExit --runInBand",
     "test-console": "jest --coverage",
-    "dbon": "mkdir -p ./db && mongod --dbpath ./db",
+    "dbon": "mkdir -p ./db && mongod -v --dbpath ./db",
     "dboff": "killall mongod",
     "build": "babel src -d build",
     "start": "babel src -d build && node index.js",
