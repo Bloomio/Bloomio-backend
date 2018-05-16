@@ -43,6 +43,18 @@ profileRouter.post('/profile', _bearerAuthMiddleware2.default, jsonParser, funct
   }).catch(next);
 });
 
+profileRouter.get('/profile/:id/planterbox', _bearerAuthMiddleware2.default, function (request, response, next) {
+  var plantCollection = null;
+  return _profile2.default.findById(request.params.id).then(function (profile) {
+    if (!profile) {
+      return next(new _httpErrors2.default(404, 'User not found, invalid id.'));
+    }
+    plantCollection = profile.planterBox;
+    _logger2.default.log(_logger2.default.INFO, 'GET - responding with a 200 status code');
+    return response.json(plantCollection);
+  }).catch(next);
+});
+
 profileRouter.get('/profile/:id', _bearerAuthMiddleware2.default, function (request, response, next) {
   return _profile2.default.findById(request.params.id).then(function (profile) {
     if (!profile) {
@@ -50,6 +62,24 @@ profileRouter.get('/profile/:id', _bearerAuthMiddleware2.default, function (requ
     }
     _logger2.default.log(_logger2.default.INFO, 'GET - responding with a 200 status code');
     return response.json(profile);
+  }).catch(next);
+});
+
+profileRouter.put('/profile/:id', _bearerAuthMiddleware2.default, jsonParser, function (request, response, next) {
+  var options = { runValidators: true, new: true };
+  return _profile2.default.findByIdAndUpdate(request.params.id, request.body, options).then(function (updatedProfile) {
+    if (!updatedProfile) {
+      return next(new _httpErrors2.default(404, 'Profile not found, invalid id.'));
+    }
+    _logger2.default.log(_logger2.default.INFO, 'PROFILE: PUT - responding with 200');
+    return response.json(updatedProfile);
+  }).catch(next);
+});
+
+profileRouter.delete('/profile/:id', _bearerAuthMiddleware2.default, function (request, response, next) {
+  return _profile2.default.findByIdAndRemove(request.params.id).then(function () {
+    _logger2.default.log(_logger2.default.INFO, 'PROFILE: DELETE - responding with 204');
+    return response.sendStatus(204);
   }).catch(next);
 });
 

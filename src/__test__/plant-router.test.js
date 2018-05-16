@@ -156,4 +156,34 @@ describe('PLANT SCHEMA', () => {
         });
     });
   });
+
+  describe('PUT /plants/:id', () => {
+    test('PUT - should return a 200 status code if plant is successfully updated', () => {
+      return createPlantMock()
+        .then((plantToUpdate) => {
+          return superagent.put(`${apiURL}/plants/${plantToUpdate.plant._id}`)
+            .set('Authorization', `Bearer ${plantToUpdate.profileMock.accountSetMock.token}`)
+            .send({
+              plantNickname: 'Gary',
+            });
+        })
+        .then((response) => {
+          expect(response.status).toEqual(200);
+          expect(response.body.plantNickname).toEqual('Gary');
+        });
+    });
+    test('PUT - should return a 400 status code for no token being passed', () => {
+      return createPlantMock()
+        .then((plantToUpdate) => {
+          return superagent.put(`${apiURL}/plants/${plantToUpdate.plant._id}`)
+            .send({
+              plantNickname: 'Vinicio',
+            });
+        })
+        .then(Promise.reject)
+        .catch((error) => {
+          expect(error.status).toEqual(400);
+        });
+    });
+  });
 });

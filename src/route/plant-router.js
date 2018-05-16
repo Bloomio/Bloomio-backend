@@ -8,6 +8,7 @@ import HttpError from 'http-errors';
 import Plant from '../model/plant';
 import bearerAuthMiddleware from '../lib/bearer-auth-middleware';
 import logger from '../lib/logger';
+import Profile from '../model/profile';
 
 const jsonParser = json();
 const plantRouter = new Router();
@@ -17,10 +18,16 @@ plantRouter.post('/plants', bearerAuthMiddleware, jsonParser, (request, response
   if (!request.body.commonName || !request.body.placement) {
     return next(new HttpError(400, 'invalid request.'));
   }
-  return new Plant(request.body).save()
-    .then((plant) => {
-      logger.log(logger.INFO, 'POST - responding with a 200 status code.');
-      return response.json(plant);
+  return Profile.findOne({ account: request.account._id })
+    .then((profile) => {
+      request.body.profile = profile._id;
+    })
+    .then(() => {
+      return new Plant(request.body).save()
+        .then((plant) => {
+          logger.log(logger.INFO, 'POST - responding with a 200 status code.');
+          return response.json(plant);
+        });
     })
     .catch(next);
 });
