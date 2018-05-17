@@ -112,9 +112,6 @@ describe('PLANT-RESOURCE SCHEMA', () => {
         })
         .then((response) => {
           expect(response.status).toEqual(200);
-          expect(response.body.commonName).toBeTruthy();
-          expect(response.body.scientificName).toBeTruthy();
-          expect(response.body.waterDate).toBeTruthy();
         });
     });
     test('GET - should return a 400 status code for no id.', () => {
