@@ -34,9 +34,6 @@ profileRouter.get('/profile/:id/planterbox', bearerAuthMiddleware, (request, res
   let plantCollection = null;
   return Profile.findById(request.params.id)
     .then((profile) => {
-      if (!profile) {
-        return next(new HttpError(404, 'User not found, invalid id.'));
-      }
       plantCollection = profile.planterBox;
       logger.log(logger.INFO, 'GET - responding with a 200 status code');
       return response.json(plantCollection);
@@ -44,12 +41,10 @@ profileRouter.get('/profile/:id/planterbox', bearerAuthMiddleware, (request, res
     .catch(next);
 });
 
+
 profileRouter.get('/profile/:id', bearerAuthMiddleware, (request, response, next) => {
   return Profile.findById(request.params.id)
     .then((profile) => {
-      if (!profile) {
-        return next(new HttpError(404, 'Profile not found, invalid id.'));
-      }
       logger.log(logger.INFO, 'GET - responding with a 200 status code');
       return response.json(profile);
     })
@@ -60,9 +55,6 @@ profileRouter.put('/profile/:id', bearerAuthMiddleware, jsonParser, (request, re
   const options = { runValidators: true, new: true };
   return Profile.findByIdAndUpdate(request.params.id, request.body, options)
     .then((updatedProfile) => {
-      if (!updatedProfile) {
-        return next(new HttpError(404, 'Profile not found, invalid id.'));
-      }
       logger.log(logger.INFO, 'PROFILE: PUT - responding with 200');
       return response.json(updatedProfile);
     })
@@ -77,9 +69,6 @@ profileRouter.put('/profile/:id/avatar', bearerAuthMiddleware, jsonParser, multe
     .then((url) => {
       return Profile.findByIdAndUpdate(request.params.id, { avatar: url }, options)
         .then((updatedProfile) => {
-          if (!updatedProfile) {
-            return next(new HttpError(404, 'Profile not found, invalid id.')); 
-          }
           return response.json(updatedProfile);
         })
         .catch(next);
