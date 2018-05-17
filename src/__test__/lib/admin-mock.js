@@ -2,16 +2,36 @@
 
 import faker from 'faker';
 import Profile from '../../model/profile';
-import { createAccountMock, removeAccountMock } from './account-mock';
+import Account from '../../model/account';
+import { removeAccountMock } from '../lib/account-mock';
 
 const createAdminMock = () => {
   const resultMock = {};
 
-  return createAccountMock()
+  resultMock.request = {
+    username: faker.internet.userName(),
+    email: faker.internet.email(),
+    password: faker.lorem.words(5),
+  };
+  return Account.create(
+    resultMock.request.username, resultMock.request.email, 
+    resultMock.request.password,
+  )
+    .then((account) => {
+      resultMock.account = account;
+      resultMock.account.isAdmin = true;
+      return account.createToken();
+    })
+    .then((token) => {
+      resultMock.token = token;
+      return Account.findById(resultMock.account._id);
+    })
+    .then((account) => {
+      resultMock.account = account;
+      return resultMock;
+    })
     .then((accountSetMock) => {
       resultMock.accountSetMock = accountSetMock;
-      resultMock.accountSetMock.isAdmin = true;
-      console.log('mockADMIN', resultMock);
       return new Profile({
         firstName: faker.name.firstName(),
         location: faker.address.zipCode(),
@@ -19,11 +39,11 @@ const createAdminMock = () => {
         phoneNumber: faker.phone.phoneNumber(),
         googleID: faker.internet.email(),
         account: accountSetMock.account._id,
-      }).save();
-    })
-    .then((profile) => {
-      resultMock.profile = profile;
-      return resultMock;
+      }).save()
+        .then((profile) => {
+          resultMock.profile = profile;
+          return resultMock;
+        });
     });
 };
 

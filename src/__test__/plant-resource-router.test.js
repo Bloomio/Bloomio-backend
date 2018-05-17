@@ -18,10 +18,10 @@ describe('PLANT-RESOURCE SCHEMA', () => {
   afterAll(stopServer);
 
   describe('POST /entry', () => {
+    jest.setTimeout(10000);
     test('POST - should return a 200 status code for a successful post.', () => {
       return createAdminMock()
         .then((responseMock) => {
-          console.log('responseMOCK', responseMock.accountSetMock);
           const { token } = responseMock.accountSetMock;
           return superagent.post(`${apiURL}/entry`)
             .set('Authorization', `Bearer ${token}`)
@@ -45,55 +45,62 @@ describe('PLANT-RESOURCE SCHEMA', () => {
           expect(response.body.mistingDate).toEqual(1);
         });
     });
-  // test('POST - should return a 409 status code for duplicate key.', () => {
-  //   return createPlantMock()
-  //     .then((responseMock) => {
-  //       const { token } = responseMock.profileMock.accountSetMock;
-  //       return superagent.post(`${apiURL}/plants`)
-  //         .set('Authorization', `Bearer ${token}`)
-  //         .send({
-  //           _id: responseMock.plant._id,
-  //           commonName: 'Geranium',
-  //           placement: 'indoors',
-  //         })
-  //         .then(Promise.reject)
-  //         .catch((error) => {
-  //           expect(error.status).toEqual(409);
-  //         });
-  //     });
-  // });
-  // test('POST - should return a 400 status code for a bad request.', () => {
-  //   return createProfileMock()
-  //     .then((responseMock) => {
-  //       const { token } = responseMock.accountSetMock;
-  //       return superagent.post(`${apiURL}/plants`)
-  //         .set('Authorization', `Bearer ${token}`)
-  //         .send({
-  //           placement: 'indoors',
-  //         })
-  //         .then(Promise.reject)
-  //         .catch((err) => {
-  //           expect(err.status).toEqual(400);
-  //         });
-  //     });
-  // });
-  // test('POST - should return a 400 status code when no token given.', () => {
-  //   return createProfileMock()
-  //     .then(() => {
-  //       return superagent.post(`${apiURL}/plants`)
-  //         .set('Authorization', 'Bearer ')
-  //         .send({
-  //           commonName: 'Geranium',
-  //           placement: 'indoors',
-  //         })
-  //         .then(Promise.reject)
-  //         .catch((response) => {
-  //           expect(response.status).toEqual(400);
-  //         });
-  //     });
-  // });
-  // });
-
+    test('POST - should return a 400 status code for a bad request.', () => {
+      return createAdminMock()
+        .then((responseMock) => {
+          const { token } = responseMock.accountSetMock;
+          return superagent.post(`${apiURL}/entry`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+              commonName: 'Bromeliad',
+            })
+            .then(Promise.reject)
+            .catch((error) => {
+              expect(error.status).toEqual(400);
+            });
+        });
+    });
+    test('POST - should return a 401 status code when no token given.', () => {
+      return createAdminMock()
+        .then(() => {
+          return superagent.post(`${apiURL}/entry`)
+            .set('Authorization', 'Bearer badToken')
+            .send({
+              commonName: 'Coffee Plant',
+              scientificName: 'coffea',
+              groupType: 'shrub',
+              waterDate: 2,
+              fertilizerDate: 7,
+              mistingDate: 4,
+            })
+            .then(Promise.reject)
+            .catch((error) => {
+              expect(error.status).toEqual(401);
+            });
+        });
+    });
+    test('POST - should return a 401 status code if user did not have admin access.', () => {
+      return createProfileMock()
+        .then((responseMock) => {
+          const { token } = responseMock.accountSetMock;
+          console.log('RESPONSEMOCK', responseMock.accountSetMock);
+          return superagent.post(`${apiURL}/entry`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+              commonName: 'Bird of Paradise',
+              scientificName: 'Strelitzia reginae',
+              groupType: 'shrub',
+              waterDate: 4,
+              fertilizerDate: 7,
+              mistingDate: 10,
+            });
+        })
+        .then(Promise.reject)
+        .catch((error) => {
+          expect(error.status).toEqual(401);
+        });
+    });
+  });
   // describe('GET /plants/:id', () => {
   //   test('GET - should return a 200 status code and the specified plant.', () => {
   //     let plantTest = null;
@@ -132,7 +139,7 @@ describe('PLANT-RESOURCE SCHEMA', () => {
   //       });
   //   });
   // });
-
+                      
   // describe('DELETE /plants/:id', () => {
   //   test('DELETE - should return a 204 status code if plant successfully deleted.', () => {
   //     return createPlantMock()
@@ -166,34 +173,50 @@ describe('PLANT-RESOURCE SCHEMA', () => {
   //       });
   //   });
   // });
-
-  // describe('PUT /plants/:id', () => {
-  //   test('PUT - should return a 200 status code if plant is successfully updated', () => {
-  //     return createPlantMock()
-  //       .then((plantToUpdate) => {
-  //         return superagent.put(`${apiURL}/plants/${plantToUpdate.plant._id}`)
-  //           .set('Authorization', `Bearer ${plantToUpdate.profileMock.accountSetMock.token}`)
-  //           .send({
-  //             plantNickname: 'Gary',
-  //           });
-  //       })
-  //       .then((response) => {
-  //         expect(response.status).toEqual(200);
-  //         expect(response.body.plantNickname).toEqual('Gary');
-  //       });
-  //   });
-  //   test('PUT - should return a 400 status code for no token being passed', () => {
-  //     return createPlantMock()
-  //       .then((plantToUpdate) => {
-  //         return superagent.put(`${apiURL}/plants/${plantToUpdate.plant._id}`)
-  //           .send({
-  //             plantNickname: 'Vinicio',
-  //           });
-  //       })
-  //       .then(Promise.reject)
-  //       .catch((error) => {
-  //         expect(error.status).toEqual(400);
-  //       });
-  //   });
+                                          
+  describe('PUT /resource/:id', () => {
+    test('PUT - should return a 200 status code if the plant resource is successfully updated', () => {
+      return createAdminMock()
+        .then((responseMock) => {
+          const { token } = responseMock.accountSetMock;
+          return superagent.post(`${apiURL}/entry`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+              commonName: 'Chinese Money Plant',
+              scientificName: 'Pilea peperomioides',
+              groupType: 'herb',
+              waterDate: 1,
+              fertilizerDate: 7,
+              mistingDate: 1,
+            });
+        })
+      return createPlantResourceMock()
+        .then((plantResourceToUpdate) => {
+          const { token } = responseMock.accountSetMock;
+          return superagent.put(`${apiURL}/entry`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+              commonName: 'Test',
+            });
+        })
+        .then((response) => {
+          expect(response.status).toEqual(200);
+          expect(response.body.commonName).toEqual('Test');
+        });
+    });
   });
 });
+//   test('PUT - should return a 400 status code for no token being passed', () => {
+//     return createPlantMock()
+//       .then((plantToUpdate) => {
+//         return superagent.put(`${apiURL}/plants/${plantToUpdate.plant._id}`)
+//           .send({
+//             plantNickname: 'Vinicio',
+//           });
+//       })
+//       .then(Promise.reject)
+//       .catch((error) => {
+//         expect(error.status).toEqual(400);
+//       });
+//   });
+// });
