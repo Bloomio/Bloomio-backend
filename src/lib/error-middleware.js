@@ -25,10 +25,6 @@ export default (error, request, response, next) => { // eslint-disable-line no-u
     logger.log(logger.INFO, 'Responding with 409');
     return response.sendStatus(409);
   }
-  if (errorMessage.includes('unauthorized')) {
-    logger.log(logger.INFO, 'Responding with 401');
-    return response.sendStatus(401);
-  }
 
   logger.log(logger.ERROR, 'Responding with 500');
   logger.log(logger.ERROR, error);
