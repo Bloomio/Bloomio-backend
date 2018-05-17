@@ -71,7 +71,7 @@ plantRouter.put('/plants/:id', bearerAuthMiddleware, jsonParser, (request, respo
 plantRouter.put('/plants/:id/image', bearerAuthMiddleware, jsonParser, multerUpload.any(), (request, response, next) => {
   const file = request.files[0];
   const key = `${file.filename}.${file.originalname}`;
-  const options = { funValidators: true, new: true };
+  const options = { runValidators: true, new: true };
   return s3Upload(file.path, key)
     .then((url) => {
       return Plant.findByIdAndUpdate(request.params.id, { image: url }, options)
