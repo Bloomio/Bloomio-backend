@@ -12,7 +12,10 @@
     "dbon": "mkdir -p ./db && mongod -v --dbpath ./db",
     "dboff": "killall mongod",
     "build": "babel src -d build",
-    "start": "babel src -d build && node index.js"
+    "start": "babel src -d build && node index.js",
+    "coverage-badge": "coverage-badger -r coverage/clover.xml -d coverage/",
+    "coverage": "npm test -- --coverage && npm run coverage-badge",
+    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
   },
   "jest": {
     "setupFiles": [
@@ -48,6 +51,7 @@
   "dependencies": {
     "agenda": "^1.0.3",
     "aws-sdk": "^2.236.1",
+    "babel-jest": "^22.4.3",
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
     "crypto": "^1.0.1",
