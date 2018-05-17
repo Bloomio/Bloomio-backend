@@ -87,11 +87,12 @@ plantRouter.put('/plants/:id/image', bearerAuthMiddleware, jsonParser, multerUpl
 });
 
 plantRouter.delete('/plants/:id', bearerAuthMiddleware, (request, response, next) => {
-  return Plant.findByIdAndRemove(request.params.id)
+  return Plant.findById(request.params.id)
     .then((plant) => {
       if (!plant) {
         return next(new HttpError(404, 'plant not found.'));
       }
+      plant.remove();
       return response.sendStatus(204);
     });
 });

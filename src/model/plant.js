@@ -104,8 +104,8 @@ const plantPostHook = (document, done) => {
       if (!profileFound) {
         throw new HttpError(500, 'Profile not found in post hook.');
       }
-      profileFound.posts = profileFound.profiles.filter((profile) => {
-        return profile._id.toString() !== document._id.toString();
+      profileFound.planterBox = profileFound.planterBox.filter((plantId) => {
+        return plantId.toString() !== document._id.toString();
       });
     })
     .then(() => done())
@@ -113,7 +113,6 @@ const plantPostHook = (document, done) => {
 };
 
 plantSchema.pre('save', plantPreHook);
-// plantSchema.post('findByIdAndUpdate', plantUpdatePostHook);
 plantSchema.post('remove', plantPostHook);
 
 export default mongoose.model('plant', plantSchema);
