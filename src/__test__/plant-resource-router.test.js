@@ -18,7 +18,7 @@ describe('PLANT-RESOURCE SCHEMA', () => {
   afterAll(stopServer);
 
   describe('POST /entry', () => {
-    jest.setTimeout(10000);
+    jest.setTimeout(20000);
     test('POST - should return a 200 status code for a successful post.', () => {
       return createAdminMock()
         .then((responseMock) => {
@@ -108,7 +108,7 @@ describe('PLANT-RESOURCE SCHEMA', () => {
         .then((plantTemplate) => {
           plantTemplateTest = plantTemplate;
           return superagent.get(`${apiURL}/entry/${plantTemplateTest.plantResource._id}`);
-          /* .set('Authorization', `Bearer ${plantTemplateTest.accountSetMock.token}`); */
+        /* .set('Authorization', `Bearer ${plantTemplateTest.accountSetMock.token}`); */
         })
         .then((response) => {
           expect(response.status).toEqual(200);

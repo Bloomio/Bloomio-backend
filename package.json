@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "mintest": "jest --forceExit --runInBand",
-    "test": "jest",
-    "testJ": "eslint . && jest --coverage --forceExit --runInBand",
+    "test": "eslint . && jest --coverage --forceExit --runInBand",
+    "testJ": "jest",
     "test-nolint": "jest --coverage --forceExit --runInBand",
     "test-console": "jest --coverage",
     "dbon": "mkdir -p ./db && mongod -v --dbpath ./db",
