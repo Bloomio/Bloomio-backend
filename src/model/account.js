@@ -29,6 +29,10 @@ const accountSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
   createdOn: {
     type: Date,
     default: () => new Date(),
