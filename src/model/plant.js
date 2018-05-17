@@ -105,7 +105,7 @@ const plantPostHook = (document, done) => {
       });
     })
     .then(() => done())
-    .catch(done); // same as .catch(result => done(result))
+    .catch(done);
 };
 
 plantSchema.pre('save', plantPreHook);
