@@ -18,7 +18,6 @@ const multerUpload = multer({ dest: `${__dirname}/../temp` });
 const plantRouter = new Router();
 
 plantRouter.post('/plants', bearerAuthMiddleware, jsonParser, (request, response, next) => {
-  logger.log(logger.INFO, 'POST - processing a request');
   if (!request.body.commonName || !request.body.placement) {
     return next(new HttpError(400, 'invalid request.'));
   }
@@ -96,4 +95,5 @@ plantRouter.delete('/plants/:id', bearerAuthMiddleware, (request, response, next
       return response.sendStatus(204);
     });
 });
+
 export default plantRouter;
