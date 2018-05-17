@@ -91,4 +91,8 @@ codes:
 200:1 time
 409:99  99 times 409 showed for users
 
+<<<<<<< HEAD
 latency: p95: 34.2 95% reponses were faster than 34.2
+=======
+latency: p95: 34.2 95% reponses were faster than 34.2
+>>>>>>> 744c03fd9465d65e40bae0110d69beb80b9895b0

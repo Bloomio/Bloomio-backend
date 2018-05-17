@@ -5,7 +5,6 @@ import { Router } from 'express';
 import { json } from 'body-parser';
 import HttpError from 'http-errors';
 
-import Plant from '../model/plant';
 import bearerAuthMiddleware from '../lib/bearer-auth-middleware';
 import logger from '../lib/logger';
 import Profile from '../model/profile';
@@ -36,15 +35,15 @@ plantResourceRouter.post('/entry', bearerAuthMiddleware, jsonParser, (request, r
     .catch(next);
 });
 
-plantResourceRouter.get('/plants/:id', bearerAuthMiddleware, (request, response, next) => {
-  return Plant.findById(request.params.id)
-    .then((plant) => {
-      if (!plant) {
+plantResourceRouter.get('/entry/:id', (request, response, next) => {
+  return PlantResource.findById(request.params.id)
+    .then((plantTemplate) => {
+      if (!plantTemplate) {
         return next(new HttpError(404, 'plant not found.'));
       }
       logger.log(logger.INFO, 'GET - responding with a 200 status code.');
-      logger.log(logger.INFO, `GET - ${JSON.stringify(plant)}`);
-      return response.json(plant);
+      logger.log(logger.INFO, `GET - ${JSON.stringify(plantTemplate)}`);
+      return response.json(plantTemplate);
     })
     .catch(next);
 });
@@ -72,9 +71,9 @@ plantResourceRouter.put('/resource/:id', bearerAuthMiddleware, jsonParser, (requ
 });
 
 plantResourceRouter.delete('/plants/:id', bearerAuthMiddleware, (request, response, next) => {
-  return Plant.findByIdAndRemove(request.params.id)
-    .then((plant) => {
-      if (!plant) {
+  return PlantResource.findByIdAndRemove(request.params.id)
+    .then((plantTemplate) => {
+      if (!plantTemplate) {
         return next(new HttpError(404, 'plant not found.'));
       }
       return response.sendStatus(204);
