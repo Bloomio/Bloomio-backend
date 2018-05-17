@@ -15,7 +15,7 @@ const jsonParser = json();
 const plantResourceRouter = new Router();
 
 plantResourceRouter.post('/entry', bearerAuthMiddleware, jsonParser, (request, response, next) => {
-  console.log('TOP OF POST', request.body);
+  // console.log('TOP OF POST', request.body);
   // if (!request.account.isAdmin) {
   //   return next(new HttpError(401, 'Unauthorized'));
   // }
@@ -37,7 +37,7 @@ plantResourceRouter.post('/entry', bearerAuthMiddleware, jsonParser, (request, r
     .catch(next);
 });
 
-plantResourceRouter.get('/plants/:id', bearerAuthMiddleware, (request, response, next) => {
+plantResourceRouter.get('/entry/:id', (request, response, next) => {
   return PlantResource.findById(request.params.id)
     .then((plantTemplate) => {
       if (!plantTemplate) {
