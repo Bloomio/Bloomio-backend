@@ -87,8 +87,9 @@ npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-error
 - 05-16-2018 6:36PM - GET route for PlantResource Schema created and tested.
 - 05-17-2018 10:00AM - Readme updated.
 - 05-17-2018 2:00PM - Artillery reports created.
-- 05-17-2018 4:00PM - Bloomio Graph ready.
-- 05-17-2018 2:00PM - 
+- 05-17-2018 4:00PM - More tests added. Delete posthook fixed. Refactored PUT route to recalculate next water date when water interval is updated.
+- 05-17-2018 4:30PM - Bloomio Graph ready.
+- 05-17-2018 4:50PM - Twilio messages are being sent.
 
 
 
