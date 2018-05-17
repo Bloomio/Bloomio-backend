@@ -6,9 +6,11 @@ import HttpError from 'http-errors';
 import multer from 'multer';
 
 import Profile from '../model/profile';
+import Plant from '../model/plant';
 import bearerAuthMiddleware from '../lib/bearer-auth-middleware';
 import logger from '../lib/logger';
 import { s3Upload } from '../lib/s3';
+import sendText from '../lib/send-sms';
 
 const jsonParser = json();
 const multerUpload = multer({ dest: `${__dirname}/../temp` });
@@ -40,6 +42,38 @@ profileRouter.get('/profile/:id/planterbox', bearerAuthMiddleware, (request, res
       plantCollection = profile.planterBox;
       logger.log(logger.INFO, 'GET - responding with a 200 status code');
       return response.json(plantCollection);
+    })
+    .catch(next);
+});
+
+profileRouter.get('/profile/:id/needswater', bearerAuthMiddleware, (request, response, next) => {
+  let plantCollection = null;
+  return Profile.findById(request.params.id)
+    .then((profile) => {
+      if (!profile) {
+        return next(new HttpError(404, 'User not found, invalid id.'));
+      }
+      plantCollection = profile.planterBox;
+      const resObj = { profile, plantCollection };
+      return resObj;
+    })
+    .then((resObj) => {
+      resObj.plantCollection.forEach((plantID) => {
+        Plant.findById(plantID)
+          .then((selectedPlant) => {
+          // if today is equal or after waterOnDate property
+            const water = selectedPlant.isTimeToWater();
+            if (water) {
+              const needsWaterToday = 'You have plants that need to be watered today.';
+              sendText(resObj.profile, needsWaterToday);
+              return response.json(needsWaterToday);
+            }
+            return undefined;
+          });
+      });
+      const noWaterToday = 'You have no plants that need watering today.';
+      sendText(resObj.profile, noWaterToday);
+      return response.json(noWaterToday);
     })
     .catch(next);
 });
