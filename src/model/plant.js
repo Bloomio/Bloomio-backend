@@ -69,8 +69,12 @@ const plantSchema = mongoose.Schema({
   },
 });
 
-plantSchema.methods.calculateNextWaterDate = function calculateNextWaterDate() {
-  this.nextWaterDate = moment(this.lastWaterDate).add(this.waterInterval, 'days');
+plantSchema.methods.calculateNextWaterDate = function calculateNextWaterDate(newInterval) {
+  let interval = this.waterInterval;
+  if (newInterval) {
+    interval = newInterval;
+  }
+  this.nextWaterDate = new Date(moment(this.lastWaterDate).add(interval, 'days'));
   return this;
 };
 
@@ -105,10 +109,11 @@ const plantPostHook = (document, done) => {
       });
     })
     .then(() => done())
-    .catch(done); // same as .catch(result => done(result))
+    .catch(done);
 };
 
 plantSchema.pre('save', plantPreHook);
+// plantSchema.post('findByIdAndUpdate', plantUpdatePostHook);
 plantSchema.post('remove', plantPostHook);
 
 export default mongoose.model('plant', plantSchema);
