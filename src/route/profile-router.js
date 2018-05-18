@@ -61,7 +61,6 @@ profileRouter.get('/profile/:id/needswater', bearerAuthMiddleware, (request, res
       resObj.plantCollection.forEach((plantID) => {
         Plant.findById(plantID)
           .then((selectedPlant) => {
-          // if today is equal or after waterOnDate property
             const water = selectedPlant.isTimeToWater();
             if (water) {
               const needsWaterToday = 'You have plants that need to be watered today.';

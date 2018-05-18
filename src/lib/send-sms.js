@@ -3,16 +3,16 @@
 import Twilio from 'twilio';
 import logger from './logger';
 
-const accountSID = 'AC6f003e9180a6ab8458ba89dfa272bb4e';
-const authToken = '5b1cc042e22236ae9e842f1cb6e6d5f7';
+const accountSID = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = new Twilio(accountSID, authToken);
 
 const sendText = (profile, message) => {
   client.messages
     .create({
       body: message,
-      from: '+13608105745',
-      to: '+13602504751',
+      from: process.env.TWILIO_NUMBER,
+      to: process.env.TELEPHONE_NUMBER,
     })
     .then(Twiliomessage => logger.log(logger.INFO, `${Twiliomessage.sid} and profile is ${profile}`))
     .done();
