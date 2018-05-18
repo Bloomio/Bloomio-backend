@@ -33,7 +33,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var jsonParser = (0, _bodyParser.json)();
 var plantResourceRouter = new _express.Router();
 
-plantResourceRouter.post('/entry', _bearerAuthMiddleware2.default, jsonParser, function (request, response, next) {
+plantResourceRouter.post('/bloomiogarden', _bearerAuthMiddleware2.default, jsonParser, function (request, response, next) {
   if (!request.account.isAdmin) {
     return next(new _httpErrors2.default(401, 'Unauthorized POST request.'));
   }
@@ -50,7 +50,7 @@ plantResourceRouter.post('/entry', _bearerAuthMiddleware2.default, jsonParser, f
   }).catch(next);
 });
 
-plantResourceRouter.get('/entry/:id', function (request, response, next) {
+plantResourceRouter.get('/bloomiogarden/:id', function (request, response, next) {
   return _plantResource2.default.findById(request.params.id).then(function (plantTemplate) {
     if (!plantTemplate) {
       return next(new _httpErrors2.default(404, 'plant not found.'));
@@ -61,7 +61,7 @@ plantResourceRouter.get('/entry/:id', function (request, response, next) {
   }).catch(next);
 });
 
-plantResourceRouter.put('/resource/:id', _bearerAuthMiddleware2.default, jsonParser, function (request, response, next) {
+plantResourceRouter.put('/bloomiogarden/:id', _bearerAuthMiddleware2.default, jsonParser, function (request, response, next) {
   var options = { runValidators: true, new: true };
   if (!request.account.isAdmin) {
     return next(new _httpErrors2.default(401, 'Unauthorized POST request.'));
@@ -79,7 +79,10 @@ plantResourceRouter.put('/resource/:id', _bearerAuthMiddleware2.default, jsonPar
   }).catch(next);
 });
 
-plantResourceRouter.delete('/plants/:id', _bearerAuthMiddleware2.default, function (request, response, next) {
+plantResourceRouter.delete('/bloomiogarden/:id', _bearerAuthMiddleware2.default, function (request, response, next) {
+  if (!request.account.isAdmin) {
+    return next(new _httpErrors2.default(401, 'Unauthorized POST request.'));
+  }
   return _plantResource2.default.findByIdAndRemove(request.params.id).then(function (plantTemplate) {
     if (!plantTemplate) {
       return next(new _httpErrors2.default(404, 'plant not found.'));

@@ -45,6 +45,7 @@ profileRouter.get('/profile/:id/planterbox', bearerAuthMiddleware, (request, res
 
 profileRouter.get('/profile/:id/needswater', bearerAuthMiddleware, (request, response, next) => {
   let plantCollection = null;
+  let needsWatered = false;
   return Profile.findById(request.params.id)
     .then((profile) => {
       if (!profile) {
@@ -60,16 +61,19 @@ profileRouter.get('/profile/:id/needswater', bearerAuthMiddleware, (request, res
           .then((selectedPlant) => {
             const water = selectedPlant.isTimeToWater();
             if (water) {
-              const needsWaterToday = 'You have plants that need to be watered today.';
-              sendText(resObj.profile, needsWaterToday);
-              return response.json(needsWaterToday);
+              needsWatered = true;
             }
             return undefined;
           });
       });
+      if (needsWatered) {
+        const needsWaterToday = 'You have plants that need to be watered today.';
+        sendText(resObj.profile, needsWaterToday);
+        return response.json(needsWaterToday);
+      } 
       const noWaterToday = 'You have no plants that need watering today.';
       sendText(resObj.profile, noWaterToday);
-      return response.json(noWaterToday);
+      return response.json(noWaterToday); 
     })
     .catch(next);
 });

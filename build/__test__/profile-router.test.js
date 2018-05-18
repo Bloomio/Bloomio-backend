@@ -155,7 +155,7 @@ describe('PROFILE SCHEMA', function () {
           return _superagent2.default.post(apiURL + '/plants').set('Authorization', 'Bearer ' + token).send({
             commonName: 'Fern',
             placement: 'indoors',
-            waterInterval: 1
+            waterInterval: -10
           }).then(function () {
             return _superagent2.default.get(apiURL + '/profile/' + resultMock.responseMock.profile._id + '/needswater').set('Authorization', 'Bearer ' + token).then(function (response) {
               expect(response.status).toEqual(200);

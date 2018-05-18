@@ -69,6 +69,7 @@ profileRouter.get('/profile/:id/planterbox', _bearerAuthMiddleware2.default, fun
 
 profileRouter.get('/profile/:id/needswater', _bearerAuthMiddleware2.default, function (request, response, next) {
   var plantCollection = null;
+  var needsWatered = false;
   return _profile2.default.findById(request.params.id).then(function (profile) {
     if (!profile) {
       return next(new _httpErrors2.default(404, 'User not found, invalid id.'));
@@ -81,13 +82,16 @@ profileRouter.get('/profile/:id/needswater', _bearerAuthMiddleware2.default, fun
       _plant2.default.findById(plantID).then(function (selectedPlant) {
         var water = selectedPlant.isTimeToWater();
         if (water) {
-          var needsWaterToday = 'You have plants that need to be watered today.';
-          (0, _sendSms2.default)(resObj.profile, needsWaterToday);
-          return response.json(needsWaterToday);
+          needsWatered = true;
         }
         return undefined;
       });
     });
+    if (needsWatered) {
+      var needsWaterToday = 'You have plants that need to be watered today.';
+      (0, _sendSms2.default)(resObj.profile, needsWaterToday);
+      return response.json(needsWaterToday);
+    }
     var noWaterToday = 'You have no plants that need watering today.';
     (0, _sendSms2.default)(resObj.profile, noWaterToday);
     return response.json(noWaterToday);
