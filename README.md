@@ -94,19 +94,5 @@ npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-error
 
 
 
-TESTING
-response time
-latency
-percentile
-create simple-load-test.json:
-duration: testing time 5,10secs
-arrivalRate: how many users per second 20
-scenarios: steps users take to break the app => do post request
-npm run start
-artillery run simple-load-test.json => 
-codes: 
-200:1 time
-409:99  99 times 409 showed for users
 
-latency: p95: 34.2 95% responses were faster than 34.2
 
