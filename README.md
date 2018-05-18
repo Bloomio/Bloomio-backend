@@ -34,19 +34,71 @@ npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-error
 # Project Design
 ![Bloomio project design](./src/assets/bloomio-schema-diagram.JPG)
 # API routes
-  1. Account
-    - POST /signup
-      - success: returns 200 status code and an authorization token.
-      - failure for bad request: returns 400 status code.
-      - failure for duplicate key: returns 409 status code.
-  2. Profile
-    - POST /profile
-     - success: 200 
-    - GET /profile/:id
-  3. Plant
-    - POST /plant
-    - GET /plant/:id
-    - PUT /plant/id
+
+1. Account
+  - POST /signup
+     - success: returns 200 status code and an authorization token.
+     - failure for bad request: returns 400 status code.
+     - failure for duplicate key: returns 409 status code.
+      
+  - GET /login
+     - success: returns 200 status code and access to user account.
+     - PUT /accounts/:id
+     - success: returns 200 status code and update selected field.
+     - failure: returns 400 status code if profile not found or if new property is invalid.
+         
+  - DELETE /accounts/:id
+     - success: returns 204 status code removes the account
+     - failure returns 400 status code if no account found.
+     - failure for duplicate key: returns 409 status code.
+    
+2. Profile
+   - POST /profile
+     - success: 200 and profile created
+     - failure: 400 code if no token passed
+     - failure: 401 code if invalid token was passed
+     
+   - GET /profile/:id
+     - success: 200 and profile access
+     - failure: 400 code if no token passed
+     - failure: 401 code if invalid token passed
+     - failure: 404 code for no id 
+   - PUT /profile/:id
+     - success: 200 and profile gets updated
+     - failure: 400 code if no token passed
+     - failure: 401 code if invalid token passed
+     - failure: 404 code if bad id was passed 
+     - failure: 409 code if duplicate keys were passed 
+   - PUT /profile/avatar
+     - success: 200 and profile picture gets uploaded
+   - DELETE /profile/:id
+     - success: 204 and profile gets removed
+     - failure: 400 code if no account exist
+     
+3. Plant
+   - POST /plant
+     - success: 200 and returns the new plant
+     - failure: 400 code if bad request
+     - failure: 400 code if no token given
+     - failure: 409 code if duplicate keys were passed
+   - GET /plant/:id
+     - success: 200 and returns the specified plant
+     - failure: 400 code if no id given
+     - failure: 404 code if missing token
+   - PUT /plant/:id
+     - success: 200 and return the updated plant
+     - failure: 400 code if bad request   
+   - DELETE /plant/:id
+     - success: 204 and deletes the plant
+     - failure: 400 code if no token being passed
+     - failure: 401 code if invalid token
+    
+4. PlanterBox:
+   - GET /profile/planterbox
+     - success: 200 and user can access their collection of plants
+     - failure: 400 code if no token passed
+     - failure: 401 code if invalid token passed
+     - failure: 404 code for no id 
 
 # Version Release Schedule
 
