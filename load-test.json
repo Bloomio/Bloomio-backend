@@ -1,14 +1,14 @@
 {
   "config": {
-    "target": "http://bloomio.us",
+    "target": "http://localhost:3000",
     "phases": [
       {
-       "duration": 5,
-       "arrivalRate": 500
+       "duration": 1,
+       "arrivalRate": 10
       },
       {
-        "duration": 5,
-        "arrivalRate": 500
+        "duration": 1,
+        "arrivalRate": 20
       }
     ],
     "processor" : "./load-test-create-user.js"
