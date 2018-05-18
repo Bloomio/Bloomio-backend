@@ -224,16 +224,6 @@ describe('PROFILE SCHEMA', function () {
         expect(error.status).toEqual(404);
       });
     });
-    test('PUT - should return a 404 status code if sucessfully updated profile avatar', function () {
-      var profileToUpdate = null;
-      return (0, _profileMock.createProfileMock)().then(function (profile) {
-        profileToUpdate = profile;
-        return _superagent2.default.put(apiURL + '/profile/' + profileToUpdate.profile._id + '/avatar').set('Authorization', 'Bearer ' + profileToUpdate.accountSetMock.token).attach('pic', __dirname + '/../assets/dog.jpg').then(function (response) {
-          expect(response.status).toEqual(200);
-          expect(response.body._id).toEqual(profileToUpdate.profile._id.toString());
-        });
-      });
-    });
     test('PUT - should return a 409 status code for duplicate unique keys.', function () {
       var dummyProfile = null;
       var profileToUpdate = null;
