@@ -25,7 +25,6 @@ export default (error, request, response, next) => { // eslint-disable-line no-u
     logger.log(logger.INFO, 'Responding with 409');
     return response.sendStatus(409);
   }
-
   logger.log(logger.ERROR, 'Responding with 500');
   logger.log(logger.ERROR, error);
   return response.sendStatus(500);

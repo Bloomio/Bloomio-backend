@@ -50,7 +50,14 @@ plantRouter.get('/plants/:id', bearerAuthMiddleware, (request, response, next) =
 
 plantRouter.put('/plants/:id', bearerAuthMiddleware, jsonParser, (request, response, next) => {
   const options = { runValidators: true, new: true };
-  return Plant.findByIdAndUpdate(request.params.id, request.body, options)
+  Plant.findByIdAndUpdate(request.params.id, request.body, options)
+    .then((updatedPlant) => {
+      if (request.body.waterInterval) {
+        updatedPlant.calculateNextWaterDate();
+        updatedPlant.update();
+      }
+      return updatedPlant;
+    })
     .then((updatedPlant) => {
       if (!updatedPlant) {
         return next(new HttpError(404, 'Plant not found.'));
@@ -80,11 +87,12 @@ plantRouter.put('/plants/:id/image', bearerAuthMiddleware, jsonParser, multerUpl
 });
 
 plantRouter.delete('/plants/:id', bearerAuthMiddleware, (request, response, next) => {
-  return Plant.findByIdAndRemove(request.params.id)
+  return Plant.findById(request.params.id)
     .then((plant) => {
       if (!plant) {
         return next(new HttpError(404, 'plant not found.'));
       }
+      plant.remove();
       return response.sendStatus(204);
     });
 });
