@@ -40,7 +40,7 @@ npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-error
       - failure for duplicate key: returns 409 status code.
   2. Profile
     - POST /profile
-     - success:
+     - success: 200 
     - GET /profile/:id
   3. Plant
     - POST /plant
@@ -49,7 +49,7 @@ npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-error
 
 # Version Release Schedule
 
-## v 1.0.0
+## v 0.1.0
 - 05-13-2018 2:53PM - Initial project scaffolding.
 - 05-14-2018 10:30AM - Logger middleware added.
 - 05-14-2018 10:40AM - Basic-auth middleware added.
@@ -58,41 +58,41 @@ npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-error
 - 05-14-2018 10:55AM - S3 middleware added.
 - 05-14-2018 11:00AM - Server and remaining dependencies added.
 - 05-14-2018 11:40AM - Scaffolding finalized.
-
-## v 1.1.0
 - 05-14-2018 1:04PM - Account Schema added.
 - 05-14-2018 2:05PM - Profile Schema and Plant Schema added.
 - 05-14-2018 4:05PM - Routes for Plant Schema finished.
 - 05-14-2018 5:06PM - Profile GET route added.
+
+## v 0.2.0
+
 - 05-14-2018 8:32PM - Documentation reformatted.
-- 05-14-2018 4:05PM - Tests for Plant Schema POST routes passing.
-- 05-14-2018 9:44PM - Account PUT routes added/tests passing.
-- 05-14-2018 10:04PM - Account DELETE routes added/tests passing.
-- 05-14-2018 10:36PM - Profile 409 PUT test passing.
+- 05-14-2018 6:05PM - Tests for Plant Schema POST routes passing.
+- 05-15-2018 9:44AM - Account PUT routes added/tests passing.
+- 05-15-2018 10:04AM - Account DELETE routes added/tests passing.
+- 05-15-2018 10:36AM - Profile 409 PUT test passing.
 - 05-15-2018 11:30AM - Tests for Plant Schema GET and DELETE routes passing.
-- 05-14-2018 01:36PM - PUT route for Plant Schema added and test passing.
+- 05-15-2018 01:36PM - PUT route for Plant Schema added and test passing.
 - 05-15-2018 05:30PM - POST and GET route for plantBox are added and tested.
-- 05-15-2018 01:36PM - PlantResource Schema added and passing test.
-- 05-15-2018 01:36PM -
-- 05-15-2018 01:36PM - 
 
 
-TESTING
-response time
-latency
-percentile
-create simple-load-test.json:
-duration: testing time 5,10secs
-arrivalRate: how many users per second 20
-scenarios: steps users take to break the app => do post request
-npm run start
-artillery run simple-load-test.json => 
-codes: 
-200:1 time
-409:99  99 times 409 showed for users
+## v 0.3.0
+- 05-16-2018 01:00PM - Updated plant Schema to store more details of watering schedule.
+- 05-16-2018 01:00PM - Finished AWS to upload plant pictures.
+- 05-16-2018 03:36PM - PlantResource Schema added and passing POST test.
+- 05-16-2018 04:16PM - Function to create Date and calculate intervals created and tested
+- 05-16-2018 04:30PM - Artillery tested.
 
-<<<<<<< HEAD
-latency: p95: 34.2 95% reponses were faster than 34.2
-=======
-latency: p95: 34.2 95% reponses were faster than 34.2
->>>>>>> 744c03fd9465d65e40bae0110d69beb80b9895b0
+## v 0.4.0
+
+- 05-16-2018 6:36PM - GET route for PlantResource Schema created and tested.
+- 05-17-2018 10:00AM - Readme updated.
+- 05-17-2018 2:00PM - Artillery reports created.
+- 05-17-2018 4:00PM - More tests added. Delete posthook fixed. Refactored PUT route to recalculate next water date when water interval is updated.
+- 05-17-2018 4:30PM - Bloomio Graph ready.
+- 05-17-2018 4:50PM - Twilio messages are being sent.
+
+
+
+
+
+
