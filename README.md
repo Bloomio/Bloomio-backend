@@ -34,19 +34,71 @@ npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-error
 # Project Design
 ![Bloomio project design](./src/assets/bloomio-schema-diagram.JPG)
 # API routes
-  1. Account
-    - POST /signup
-      - success: returns 200 status code and an authorization token.
-      - failure for bad request: returns 400 status code.
-      - failure for duplicate key: returns 409 status code.
-  2. Profile
-    - POST /profile
-     - success: 200 
-    - GET /profile/:id
-  3. Plant
-    - POST /plant
-    - GET /plant/:id
-    - PUT /plant/id
+
+1. Account
+  - POST /signup
+     - success: returns 200 status code and an authorization token.
+     - failure for bad request: returns 400 status code.
+     - failure for duplicate key: returns 409 status code.
+      
+  - GET /login
+     - success: returns 200 status code and access to user account.
+     - PUT /accounts/:id
+     - success: returns 200 status code and update selected field.
+     - failure: returns 400 status code if profile not found or if new property is invalid.
+         
+  - DELETE /accounts/:id
+     - success: returns 204 status code removes the account
+     - failure returns 400 status code if no account found.
+     - failure for duplicate key: returns 409 status code.
+    
+2. Profile
+   - POST /profile
+     - success: 200 and profile created
+     - failure: 400 code if no token passed
+     - failure: 401 code if invalid token was passed
+     
+   - GET /profile/:id
+     - success: 200 and profile access
+     - failure: 400 code if no token passed
+     - failure: 401 code if invalid token passed
+     - failure: 404 code for no id 
+   - PUT /profile/:id
+     - success: 200 and profile gets updated
+     - failure: 400 code if no token passed
+     - failure: 401 code if invalid token passed
+     - failure: 404 code if bad id was passed 
+     - failure: 409 code if duplicate keys were passed 
+   - PUT /profile/avatar
+     - success: 200 and profile picture gets uploaded
+   - DELETE /profile/:id
+     - success: 204 and profile gets removed
+     - failure: 400 code if no account exist
+     
+3. Plant
+   - POST /plant
+     - success: 200 and returns the new plant
+     - failure: 400 code if bad request
+     - failure: 400 code if no token given
+     - failure: 409 code if duplicate keys were passed
+   - GET /plant/:id
+     - success: 200 and returns the specified plant
+     - failure: 400 code if no id given
+     - failure: 404 code if missing token
+   - PUT /plant/:id
+     - success: 200 and return the updated plant
+     - failure: 400 code if bad request   
+   - DELETE /plant/:id
+     - success: 204 and deletes the plant
+     - failure: 400 code if no token being passed
+     - failure: 401 code if invalid token
+    
+4. PlanterBox:
+   - GET /profile/planterbox
+     - success: 200 and user can access their collection of plants
+     - failure: 400 code if no token passed
+     - failure: 401 code if invalid token passed
+     - failure: 404 code for no id 
 
 # Version Release Schedule
 
@@ -93,7 +145,155 @@ npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-error
 - 05-17-2018 4:50PM - Twilio messages are being sent.
 
 
+###LOAD TEST
+
+```
+HEROKU server
+
+  "aggregate": {
+    "timestamp": "2018-05-17T21:37:03.213Z",
+    "scenariosCreated": 10010,
+    "scenariosCompleted": 5578,
+    "requestsCompleted": 15584,
+    "latency": {
+      "min": 76,
+      "max": 31727,
+      "median": 10051.8,
+      "p95": 30411,
+      "p99": 30646
+    },
+    "rps": {
+      "count": 15588,
+      "mean": 219.98
+    },
+    "scenarioDuration": {
+      "min": 395.1,
+      "max": 30960.4,
+      "median": 12914.2,
+      "p95": 29619.1,
+      "p99": 30457.9
+    },
+    "scenarioCounts": {
+      "Create Users": 10010
+    },
+    "errors": {
+      "ENOTFOUND": 4
+    },
+    "codes": {
+      "200": 11145,
+      "409": 38,
+      "503": 4401
+    },
+    "matches": 0,
+    "customStats": {},
+    "phases": [
+      {
+        "duration": 1,
+        "arrivalRate": 10
+      },
+      {
+        "duration": 10,
+        "arrivalRate": 1000
+      }
+    ]
+  },
+  ```
+ 
+ ``` 
+LOCAL HOST
+
+  "aggregate": {
+      "timestamp": "2018-05-17T21:40:22.561Z",
+      "scenariosCreated": 10010,
+      "scenariosCompleted": 9943,
+      "requestsCompleted": 19890,
+      "latency": {
+        "min": 1.7,
+        "max": 52406.5,
+        "median": 1166.9,
+        "p95": 48040.3,
+        "p99": 51477
+      },
+      "rps": {
+        "count": 19953,
+        "mean": 270.55
+      },
+      "scenarioDuration": {
+        "min": 26,
+        "max": 52427.6,
+        "median": 29786.8,
+        "p95": 50535.2,
+        "p99": 52005
+      },
+      "scenarioCounts": {
+        "Create Users": 10010
+      },
+      "errors": {
+        "ECONNRESET": 63
+      },
+      "codes": {
+        "200": 19879,
+        "409": 11
+      },
+      "matches": 0,
+      "customStats": {},
+      "phases": [
+        {
+          "duration": 1,
+          "arrivalRate": 10
+        },
+        {
+          "duration": 10,
+          "arrivalRate": 1000
+        }
+      ]
+    },
+    ```
 
 
 
+```
 
+    LOCAL HOST median under 20ms
+    
+    "timestamp": "2018-05-17T21:41:46.330Z",
+    "scenariosCreated": 30,
+    "scenariosCompleted": 30,
+    "requestsCompleted": 60,
+    "latency": {
+      "min": 2.9,
+      "max": 69.2,
+      "median": 19.5,
+      "p95": 28.6,
+      "p99": 66.8 
+    },
+    "rps": {
+      "count": 60,
+      "mean": 25.21
+    },
+    "scenarioDuration": {
+      "min": 24.7,
+      "max": 126.3,
+      "median": 26.3,
+      "p95": 52.5,
+      "p99": null
+    },
+    "scenarioCounts": {
+      "Create Users": 30
+    },
+    "errors": {},
+    "codes": {
+      "200": 60
+    },
+    "matches": 0,
+    "customStats": {},
+    "phases": [
+      {
+        "duration": 1,
+        "arrivalRate": 10
+      },
+      {
+        "duration": 1,
+        "arrivalRate": 20
+      }
+    ]

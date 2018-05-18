@@ -197,7 +197,7 @@ describe('PROFILE SCHEMA', () => {
                 .send({
                   commonName: 'Fern',
                   placement: 'indoors',
-                  waterInterval: 1,
+                  waterInterval: -10,
                 })
                 .then(() => {
                   return superagent.get(`${apiURL}/profile/${resultMock.responseMock.profile._id}/needswater`)
