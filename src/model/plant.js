@@ -69,8 +69,12 @@ const plantSchema = mongoose.Schema({
   },
 });
 
-plantSchema.methods.calculateNextWaterDate = function calculateNextWaterDate() {
-  this.nextWaterDate = moment(this.lastWaterDate).add(this.waterInterval, 'days');
+plantSchema.methods.calculateNextWaterDate = function calculateNextWaterDate(newInterval) {
+  let interval = this.waterInterval;
+  if (newInterval) {
+    interval = newInterval;
+  }
+  this.nextWaterDate = new Date(moment(this.lastWaterDate).add(interval, 'days'));
   return this;
 };
 
@@ -100,12 +104,12 @@ const plantPostHook = (document, done) => {
       if (!profileFound) {
         throw new HttpError(500, 'Profile not found in post hook.');
       }
-      profileFound.posts = profileFound.profiles.filter((profile) => {
-        return profile._id.toString() !== document._id.toString();
+      profileFound.planterBox = profileFound.planterBox.filter((plantId) => {
+        return plantId.toString() !== document._id.toString();
       });
     })
     .then(() => done())
-    .catch(done); // same as .catch(result => done(result))
+    .catch(done);
 };
 
 plantSchema.pre('save', plantPreHook);

@@ -1,9 +1,11 @@
+'use strict';
+
 process.env.NODE_ENV = 'development';
 process.env.PORT = 5000;
 process.env.MONGODB_URI = 'mongodb://localhost/testing5';
 process.env.BLOOMIO_SECRET = 'top secret';
 
-const isAwsMock = true;
+var isAwsMock = true;
 
 if (isAwsMock) {
   process.env.AWS_BUCKET = 'fake';
@@ -14,7 +16,7 @@ if (isAwsMock) {
   require('dotenv').config();
 }
 
-const isRealTwilio = true;
+var isRealTwilio = true;
 
 if (isRealTwilio) {
   require('dotenv').config();

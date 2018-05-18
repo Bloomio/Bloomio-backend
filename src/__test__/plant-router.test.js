@@ -172,6 +172,21 @@ describe('PLANT SCHEMA', () => {
           expect(response.body.plantNickname).toEqual('Gary');
         });
     });
+    test('PUT - should return a 200 status code if plant waterInterval and nextWaterDate is successfully updated', () => {
+      return createPlantMock()
+        .then((plantToUpdate) => {
+          plantToUpdate.plant.waterInterval = 4;
+          return superagent.put(`${apiURL}/plants/${plantToUpdate.plant._id}`)
+            .set('Authorization', `Bearer ${plantToUpdate.profileMock.accountSetMock.token}`)
+            .send({
+              waterInterval: 12,
+            });
+        })
+        .then((response) => {
+          expect(response.status).toEqual(200);
+          expect(response.body.waterInterval).toEqual(12);
+        });
+    });
     test('PUT - should return a 200 status code if successfully updated plant image', () => {
       let plantToUpdate = null;
       return createPlantMock()

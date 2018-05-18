@@ -6,9 +6,11 @@ import HttpError from 'http-errors';
 import multer from 'multer';
 
 import Profile from '../model/profile';
+import Plant from '../model/plant';
 import bearerAuthMiddleware from '../lib/bearer-auth-middleware';
 import logger from '../lib/logger';
 import { s3Upload } from '../lib/s3';
+import sendText from '../lib/send-sms';
 
 const jsonParser = json();
 const multerUpload = multer({ dest: `${__dirname}/../temp` });
@@ -34,9 +36,6 @@ profileRouter.get('/profile/:id/planterbox', bearerAuthMiddleware, (request, res
   let plantCollection = null;
   return Profile.findById(request.params.id)
     .then((profile) => {
-      if (!profile) {
-        return next(new HttpError(404, 'User not found, invalid id.'));
-      }
       plantCollection = profile.planterBox;
       logger.log(logger.INFO, 'GET - responding with a 200 status code');
       return response.json(plantCollection);
@@ -44,12 +43,40 @@ profileRouter.get('/profile/:id/planterbox', bearerAuthMiddleware, (request, res
     .catch(next);
 });
 
-profileRouter.get('/profile/:id', bearerAuthMiddleware, (request, response, next) => {
+profileRouter.get('/profile/:id/needswater', bearerAuthMiddleware, (request, response, next) => {
+  let plantCollection = null;
   return Profile.findById(request.params.id)
     .then((profile) => {
       if (!profile) {
-        return next(new HttpError(404, 'Profile not found, invalid id.'));
+        return next(new HttpError(404, 'User not found, invalid id.'));
       }
+      plantCollection = profile.planterBox;
+      const resObj = { profile, plantCollection };
+      return resObj;
+    })
+    .then((resObj) => {
+      resObj.plantCollection.forEach((plantID) => {
+        Plant.findById(plantID)
+          .then((selectedPlant) => {
+            const water = selectedPlant.isTimeToWater();
+            if (water) {
+              const needsWaterToday = 'You have plants that need to be watered today.';
+              sendText(resObj.profile, needsWaterToday);
+              return response.json(needsWaterToday);
+            }
+            return undefined;
+          });
+      });
+      const noWaterToday = 'You have no plants that need watering today.';
+      sendText(resObj.profile, noWaterToday);
+      return response.json(noWaterToday);
+    })
+    .catch(next);
+});
+
+profileRouter.get('/profile/:id', bearerAuthMiddleware, (request, response, next) => {
+  return Profile.findById(request.params.id)
+    .then((profile) => {
       logger.log(logger.INFO, 'GET - responding with a 200 status code');
       return response.json(profile);
     })
@@ -60,9 +87,6 @@ profileRouter.put('/profile/:id', bearerAuthMiddleware, jsonParser, (request, re
   const options = { runValidators: true, new: true };
   return Profile.findByIdAndUpdate(request.params.id, request.body, options)
     .then((updatedProfile) => {
-      if (!updatedProfile) {
-        return next(new HttpError(404, 'Profile not found, invalid id.'));
-      }
       logger.log(logger.INFO, 'PROFILE: PUT - responding with 200');
       return response.json(updatedProfile);
     })
@@ -77,9 +101,6 @@ profileRouter.put('/profile/:id/avatar', bearerAuthMiddleware, jsonParser, multe
     .then((url) => {
       return Profile.findByIdAndUpdate(request.params.id, { avatar: url }, options)
         .then((updatedProfile) => {
-          if (!updatedProfile) {
-            return next(new HttpError(404, 'Profile not found, invalid id.')); 
-          }
           return response.json(updatedProfile);
         })
         .catch(next);

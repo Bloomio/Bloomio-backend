@@ -1,0 +1,27 @@
+{
+  "config": {
+    "target": "http://bloomio.us",
+    "phases": [
+      {
+       "duration": 10,
+       "arrivalRate": 20
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "flow": [
+        {
+          "post": {
+            "url": "/signup",
+            "json": {
+              "username": "Vinny",
+              "email": "thehound@gregor.com",
+              "password": "notthehound"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
