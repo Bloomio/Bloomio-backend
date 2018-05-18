@@ -13,7 +13,7 @@ import PlantResource from '../model/plant-resource';
 const jsonParser = json();
 const plantResourceRouter = new Router();
 
-plantResourceRouter.post('/entry', bearerAuthMiddleware, jsonParser, (request, response, next) => {
+plantResourceRouter.post('/bloomiogarden', bearerAuthMiddleware, jsonParser, (request, response, next) => {
   if (!request.account.isAdmin) {
     return next(new HttpError(401, 'Unauthorized POST request.'));
   }
@@ -35,7 +35,7 @@ plantResourceRouter.post('/entry', bearerAuthMiddleware, jsonParser, (request, r
     .catch(next);
 });
 
-plantResourceRouter.get('/entry/:id', (request, response, next) => {
+plantResourceRouter.get('/bloomiogarden/:id', (request, response, next) => {
   return PlantResource.findById(request.params.id)
     .then((plantTemplate) => {
       if (!plantTemplate) {
@@ -48,7 +48,7 @@ plantResourceRouter.get('/entry/:id', (request, response, next) => {
     .catch(next);
 });
 
-plantResourceRouter.put('/resource/:id', bearerAuthMiddleware, jsonParser, (request, response, next) => {
+plantResourceRouter.put('/bloomiogarden/:id', bearerAuthMiddleware, jsonParser, (request, response, next) => {
   const options = { runValidators: true, new: true };
   if (!request.account.isAdmin) {
     return next(new HttpError(401, 'Unauthorized POST request.'));
@@ -70,7 +70,10 @@ plantResourceRouter.put('/resource/:id', bearerAuthMiddleware, jsonParser, (requ
     .catch(next);
 });
 
-plantResourceRouter.delete('/plants/:id', bearerAuthMiddleware, (request, response, next) => {
+plantResourceRouter.delete('/bloomiogarden/:id', bearerAuthMiddleware, (request, response, next) => {
+  if (!request.account.isAdmin) {
+    return next(new HttpError(401, 'Unauthorized POST request.'));
+  }
   return PlantResource.findByIdAndRemove(request.params.id)
     .then((plantTemplate) => {
       if (!plantTemplate) {

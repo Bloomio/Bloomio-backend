@@ -50,6 +50,7 @@ describe('Plant watering schedule', function () {
       expect(testPlant.calculateNextWaterDate().nextWaterDate).toEqual(testWaterDate);
     });
   });
+
   describe('isTimeToWater', function () {
     test('should return true for nextWaterDate dates in the past', function () {
       var testPlant = new _plant2.default();

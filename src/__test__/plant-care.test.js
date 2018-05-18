@@ -4,7 +4,6 @@ import moment from 'moment';
 import { startServer, stopServer } from '../lib/server';
 import Plant from '../model/plant';
 
-
 // moment() returns an object, but plant.nextWaterDate is a JS Date.
 // Convert a moment() object into a JS Date by wrapping it in new Date();
 // note: JS Date months are 0-indexed, so January is 00, etc.
@@ -43,6 +42,7 @@ describe('Plant watering schedule', () => {
       expect(testPlant.calculateNextWaterDate().nextWaterDate).toEqual(testWaterDate);
     });
   });
+  
   describe('isTimeToWater', () => {
     test('should return true for nextWaterDate dates in the past', () => {
       const testPlant = new Plant();

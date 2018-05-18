@@ -39,8 +39,6 @@ var _plantResourceRouter2 = _interopRequireDefault(_plantResourceRouter);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import taskRouter from '../route/task-router';
-
 var app = (0, _express2.default)();
 var server = null;
 
@@ -49,7 +47,6 @@ app.use(_accountRouter2.default);
 app.use(_profileRouter2.default);
 app.use(_plantRouter2.default);
 app.use(_plantResourceRouter2.default);
-// app.use(taskRouter);
 
 app.all('*', function (request, response) {
   _logger2.default.log(_logger2.default.INFO, 'Returning a 404 from the catch-all/default route');
