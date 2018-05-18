@@ -22,7 +22,7 @@
 npm init -y
 ```
 ## Developer Dependencies
-[![ForTheBadge uses-js](http://ForTheBadge.com/images/badges/uses-js.svg)](http://ForTheBadge.com)
+[![ForTheBadge uses-js](https://ForTheBadge.com/images/badges/uses-js.svg)](https://ForTheBadge.com)
 
 ```
 npm i -D aws-sdk-mock babel-cli babel-eslint babel-preset-env babel-preset-stage-0 babel-register eslint eslint-config-airbnb-base eslint-plugin-import eslint-plugin-jest jest superagent winston@next
@@ -31,7 +31,8 @@ npm i -D aws-sdk-mock babel-cli babel-eslint babel-preset-env babel-preset-stage
 ```
 npm i aws-sdk bcrypt body-parser crypto dotenv express faker fs-extra http-errors jsonwebtoken mongoose multer twilio mongodb 
 ```
-
+# Project Design
+![Bloomio project design](./src/assets/bloomio-schema-diagram.JPG)
 # API routes
   1. Account
     - POST /signup

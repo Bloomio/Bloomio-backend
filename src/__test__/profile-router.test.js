@@ -4,14 +4,16 @@ import superagent from 'superagent';
 import { startServer, stopServer } from '../lib/server';
 import { createAccountMock } from './lib/account-mock';
 import { removeProfileMock, createProfileMock } from './lib/profile-mock';
-import { createPlantMock } from './lib/plant-mock';
+import { createPlantMock, removePlantMock } from './lib/plant-mock';
 
 const apiURL = `http://localhost:${process.env.PORT}`;
 
 describe('PROFILE SCHEMA', () => {
   beforeAll(startServer);
-  afterAll(stopServer);
   afterEach(removeProfileMock);
+  afterEach(removePlantMock);
+  afterAll(stopServer);
+  jest.setTimeout(10000);
 
   describe('POST /profile', () => {
     test('POST - should return a 200 status code and the newly created profile.', () => {
@@ -176,8 +178,40 @@ describe('PROFILE SCHEMA', () => {
             });
         });
     });
+    test('GET - should return a 200 status code and the each plant that needs to be watered.', () => {
+      const resultMock = {};
+      return createProfileMock()
+        .then((responseMock) => {
+          resultMock.responseMock = responseMock;
+          const { token } = responseMock.accountSetMock;
+          return superagent.post(`${apiURL}/plants`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+              commonName: 'Geranium',
+              placement: 'indoors',
+              waterInterval: 1,
+            })
+            .then(() => {
+              return superagent.post(`${apiURL}/plants`)
+                .set('Authorization', `Bearer ${token}`)
+                .send({
+                  commonName: 'Fern',
+                  placement: 'indoors',
+                  waterInterval: 1,
+                })
+                .then(() => {
+                  return superagent.get(`${apiURL}/profile/${resultMock.responseMock.profile._id}/needswater`)
+                    .set('Authorization', `Bearer ${token}`)
+                    .then((response) => {
+                      expect(response.status).toEqual(200);
+                      expect(response.body).toEqual('You have no plants that need watering today.');
+                    });
+                });
+            });
+        });
+    });
   });
-
+    
   describe('PUT /profile', () => {
     test('PUT - should return a 200 status code if successful.', () => {
       let profileToUpdate = null;
