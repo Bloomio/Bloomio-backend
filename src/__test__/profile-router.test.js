@@ -237,7 +237,7 @@ describe('PROFILE SCHEMA', () => {
           profileToUpdate = profile;
           return superagent.put(`${apiURL}/profile/${profileToUpdate.profile._id}/avatar`)
             .set('Authorization', `Bearer ${profileToUpdate.accountSetMock.token}`)
-            .attach('pic', `${__dirname}/../assets/dog.jpg`)
+            .attach('pic', `${__dirname}/assets/dog.jpg`)
             .then((response) => {
               expect(response.status).toEqual(200);
               expect(response.body._id).toEqual(profileToUpdate.profile._id.toString());
