@@ -297,3 +297,6 @@ LOCAL HOST
         "arrivalRate": 20
       }
     ]
+
+# Credits and Collaborations
+A special thanks to our TA Nicole Weese for her assistance in incorporating Twilio into our project.
